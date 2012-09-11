@@ -1,0 +1,3 @@
+# Mutual Mobile Game Jam Stuff
+
+* I haven't pushed to a shared GIT repo before, so I'm putting in a readme as an experiment.
