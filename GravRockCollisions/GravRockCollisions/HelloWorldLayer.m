@@ -99,6 +99,13 @@
     Flower *flower;
     int i = 0;
     CCARRAY_FOREACH(_flowers, flower) {
+        CGFloat growthFactor = 1.001;
+        if ( flower.radius < _winsize.width / 6 ) {
+            flower.radius = flower.radius * growthFactor;
+            flower.scale = flower.scale * growthFactor;
+        }
+        
+
         // velocity verlet
         flower.position = ccpAdd(ccpAdd(flower.position, ccpMult(flower.vel, dt)), ccpMult(flower.acc, dt*dt));
         flower.vel = ccpAdd(flower.vel, ccpMult(flower.acc, dt));
@@ -250,7 +257,7 @@
 
 -(Flower *) makeBlueFlower:(CGPoint)pos {
     blueFlowerCount++;
-    float scale = 0.3f;
+    float scale = 0.1f;
     NSString *flowerPath = [[NSBundle mainBundle]pathForResource:@"blue-flower" ofType:@"png" ];
     Flower *flower = [Flower spriteWithFile:flowerPath];
     flower.position = pos;
@@ -260,7 +267,7 @@
     flower.mass = 1.0f;
     flower.radius = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 1 : 0.5) * flower.boundingBox.size.width * scale;
     flower.rot = random() / 0x30000000 - 0.5;
-    flower.scale = 0.3;
+    flower.scale = scale;
     flower.tag = BLUE_FLOWER_TAG;
     CCLOG(@"Blue Flower: count %d, x %f, y%f",
           blueFlowerCount, flower.position.x, flower.position.y);
@@ -269,7 +276,7 @@
 
 -(Flower *) makeOrangeFlower:(CGPoint)pos {
     orangeFlowerCount++;
-    float scale = 0.3f;
+    float scale = 0.1f;
     NSString *flowerPath = [[NSBundle mainBundle]pathForResource:@"orange-flower" ofType:@"png" ];
     Flower *flower = [Flower spriteWithFile:flowerPath];
     flower.position = pos;
