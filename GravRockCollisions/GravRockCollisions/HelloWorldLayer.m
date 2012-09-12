@@ -33,6 +33,9 @@
 
 -(id) init {
 	if( (self=[super init]) ) {
+        blueFlowerCount = 0;
+        orangeFlowerCount = 0;
+        
         self.isTouchEnabled = YES;
         self.isAccelerometerEnabled = YES;
         
@@ -199,6 +202,7 @@
 }
 
 -(Flower *) makeBlueFlower:(CGPoint)pos {
+    blueFlowerCount++;
     float scale = 0.3f;
     NSString *flowerPath = [[NSBundle mainBundle]pathForResource:@"blue-flower" ofType:@"png" ];
     Flower *flower = [Flower spriteWithFile:flowerPath];
@@ -210,10 +214,13 @@
     flower.radius = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 1 : 0.5) * flower.boundingBox.size.width * scale;
     flower.rot = random() / 0x30000000 - 0.5;
     flower.scale = 0.3;
+    CCLOG(@"Blue Flower: count %d, x %f, y%f",
+          blueFlowerCount, flower.position.x, flower.position.y);
     return flower;
 }
 
 -(Flower *) makeOrangeFlower:(CGPoint)pos {
+    orangeFlowerCount++;
     float scale = 0.3f;
     NSString *flowerPath = [[NSBundle mainBundle]pathForResource:@"orange-flower" ofType:@"png" ];
     Flower *flower = [Flower spriteWithFile:flowerPath];
@@ -225,6 +232,9 @@
     flower.radius = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 1 : 0.5) * flower.boundingBox.size.width * scale;
     flower.rot = random() / 0x30000000 - 0.5;
     flower.scale = scale;
+    CCLOG(@"Orange Flower: count %d, x %f, y%f",
+          orangeFlowerCount, flower.position.x, flower.position.y);
+
     return flower;
 }
 
