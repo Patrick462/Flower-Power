@@ -44,13 +44,13 @@
         }
         
         // put up the green background
-        CCSprite *greenBackground = [CCSprite spriteWithFile:@"Background Green 480x320.png"];
-        [greenBackground setPosition:ccp((_winsize.height / 2), (_winsize.width / 2))];
+        CCSprite *greenBackground = [CCSprite spriteWithFile:@"Background Green.png"];
+        [greenBackground setPosition:ccp((_winsize.width / 2), (_winsize.height / 2))];
         [self addChild:greenBackground z:0];
         
         // add the demon bar in the middle of the screen
         CCSprite *demonBar = [CCSprite spriteWithFile:@"Demon Bar.png"];
-        [demonBar setPosition:ccp((_winsize.height) / 2, (_winsize.width / 2))];
+        [demonBar setPosition:ccp((_winsize.width) / 2, (_winsize.height / 2))];
         [self addChild:demonBar z:1];
         
         // load texture
