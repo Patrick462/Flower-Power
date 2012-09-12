@@ -4,7 +4,7 @@
 //
 //  Created by Justin Shacklette on 9/6/12.
 //  Copyright Saturnboy 2012. All rights reserved.
-//
+//  Flower code by Sean McManus, James Stewart, Patrick Weigel
 
 #import "HelloWorldLayer.h"
 #import "AppDelegate.h"
