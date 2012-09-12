@@ -59,6 +59,8 @@
         orangeFlowerCount = 0;
         self.score = 0;
         
+        [[SimpleAudioEngine sharedEngine] playBackgroundMusic:@"background-music-aac.wav"];
+        
         self.isTouchEnabled = YES;
         self.isAccelerometerEnabled = YES;
         

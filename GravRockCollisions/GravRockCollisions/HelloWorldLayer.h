@@ -7,6 +7,8 @@
 //
 
 #import "cocos2d.h"
+#import "SimpleAudioEngine.h"
+
 @class Flower;
 
 @interface HelloWorldLayer : CCLayer {
