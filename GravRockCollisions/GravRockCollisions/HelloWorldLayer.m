@@ -45,7 +45,7 @@
         
         // put up the green background
         CCSprite *greenBackground = [CCSprite spriteWithFile:@"Background Green 480x320.png"];
-        [greenBackground setPosition:ccp((_winsize.width / 2), (_winsize.height / 2))];
+        [greenBackground setPosition:ccp((_winsize.height / 2), (_winsize.width / 2))];
         [self addChild:greenBackground z:0];
         
         // load texture
@@ -56,11 +56,11 @@
         // init rocks array
         _rocks = [[CCArray alloc] initWithCapacity:MAX_ROCKS];    
         
-        // init arrow
-        _arrow = [CCSprite spriteWithSpriteFrameName:@"arrow.png"];
-        _arrow.position = ccp(_winsize.width/2, _winsize.height/2);
-        _arrow.anchorPoint = ccp(0.25f,0.5f);
-        [self addChild:_arrow z:2 tag:234];
+//        // init arrow
+//        _arrow = [CCSprite spriteWithSpriteFrameName:@"arrow.png"];
+//        _arrow.position = ccp(_winsize.width/2, _winsize.height/2);
+//        _arrow.anchorPoint = ccp(0.25f,0.5f);
+//        [self addChild:_arrow z:2 tag:234];
 
         [self scheduleUpdate];
 	}
