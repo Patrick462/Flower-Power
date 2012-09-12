@@ -159,6 +159,7 @@
 		3824411A160035AF00DFF414 /* Demon Bar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Demon Bar@2x.png"; sourceTree = "<group>"; };
 		A539068F160021EE0059D53C /* Demon Bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Demon Bar.png"; sourceTree = "<group>"; };
 		A539069716002AB40059D53C /* HD Background Green 960x640.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HD Background Green 960x640.png"; sourceTree = "<group>"; };
+		A57F79F91600545D00DAAFE3 /* iBlame Background.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iBlame Background.aif"; sourceTree = "<group>"; };
 		D0BB02FC15F99A27003441D4 /* GravRockCollisions.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GravRockCollisions.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0BB030015F99A27003441D4 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		D0BB030215F99A27003441D4 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -502,6 +503,7 @@
 		D0BB031315F99A27003441D4 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A57F79F91600545D00DAAFE3 /* iBlame Background.aif */,
 				382441151600345900DFF414 /* Background Green.png */,
 				382441161600345900DFF414 /* Background Green@2x.png */,
 				A539069716002AB40059D53C /* HD Background Green 960x640.png */,
