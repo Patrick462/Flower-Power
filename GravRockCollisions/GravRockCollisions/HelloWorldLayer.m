@@ -120,6 +120,28 @@
             flower.vel = ccp(-flower.vel.x * BOUNCE_RESTITUTION, flower.vel.y);
         }
         
+        // bounce flower off of barrier if the barrier is there
+        if (self.isFingerDown)
+        {
+            // if traveling to the right, and close to the barrier but not beyond it, turn around
+            if    ((flower.position.x > (_winsize.width / 2) - flower.radius)
+                && (flower.position.x < (_winsize.width / 2))
+                && (flower.vel.x > 0))
+            {
+                flower.vel = ccp(-flower.vel.x * BOUNCE_RESTITUTION, flower.vel.y);
+            }
+            
+            // if traveling to the left, and close to the barrier but not beyond it, turn around
+            if    ((flower.position.x < (_winsize.width / 2) + flower.radius)
+                   && (flower.position.x > (_winsize.width / 2))
+                   && (flower.vel.x < 0))
+            {
+                flower.vel = ccp(-flower.vel.x * BOUNCE_RESTITUTION, flower.vel.y);
+            }
+            
+ 
+        }
+        
         // collide with other rocks
         for (int j = i + 1; j < _flowers.count; j++) {
             Flower *flower2 = [_flowers objectAtIndex:j];
@@ -171,20 +193,6 @@
         }
         
         i++;
-    }
-}
-
-- (void) accelerometer:(UIAccelerometer *)accelerometer didAccelerate:(UIAcceleration *)acceleration {    
-    _accelerometer = ccpLerp(_accelerometer, ccp(-acceleration.x, -acceleration.y), ACCELEROMETER_INTERP_FACTOR);
-    float angle = -CC_RADIANS_TO_DEGREES(ccpToAngle(_accelerometer));
-    CCLOG(@"ang=%.3f mag=%.5f", angle, ccpLength(_accelerometer));
-    
-
-    // update gravity on each rock
-    CGPoint grav = ccpMult(_accelerometer, -10.0f * PX_TO_M);
-    Flower *rock;
-    CCARRAY_FOREACH(_flowers, rock) {
-        rock.acc = grav;
     }
 }
 
