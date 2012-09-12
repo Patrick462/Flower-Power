@@ -48,6 +48,11 @@
         [greenBackground setPosition:ccp((_winsize.height / 2), (_winsize.width / 2))];
         [self addChild:greenBackground z:0];
         
+        // add the demon bar in the middle of the screen
+        CCSprite *demonBar = [CCSprite spriteWithFile:@"Demon Bar.png"];
+        [demonBar setPosition:ccp((_winsize.height) / 2, (_winsize.width / 2))];
+        [self addChild:demonBar z:1];
+        
         // load texture
         [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:texturePlist];
         CCSpriteBatchNode *sheet = [CCSpriteBatchNode batchNodeWithFile:textureFile];
