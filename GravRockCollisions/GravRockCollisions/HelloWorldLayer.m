@@ -259,8 +259,8 @@
             } else {
                 if ( [self flowerIsOnLeft:flower] == lastFlowerIsOnLeft ) return NO;
             }
-            return YES;
         }
+        return YES;
     }
     return NO;
 }
