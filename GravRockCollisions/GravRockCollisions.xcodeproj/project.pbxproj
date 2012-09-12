@@ -12,6 +12,8 @@
 		21DA0E8C16001FE900199182 /* orange-flower.png in Resources */ = {isa = PBXBuildFile; fileRef = 21DA0E8916001FE900199182 /* orange-flower.png */; };
 		A5390690160021EE0059D53C /* Background Green 480x320.png in Resources */ = {isa = PBXBuildFile; fileRef = A539068E160021EE0059D53C /* Background Green 480x320.png */; };
 		A5390691160021EE0059D53C /* Demon Bar.png in Resources */ = {isa = PBXBuildFile; fileRef = A539068F160021EE0059D53C /* Demon Bar.png */; };
+		A539069816002AB40059D53C /* HD Background Green 960x640.png in Resources */ = {isa = PBXBuildFile; fileRef = A539069716002AB40059D53C /* HD Background Green 960x640.png */; };
+		A539069B16002B460059D53C /* HD Demon Bar 6x640.png in Resources */ = {isa = PBXBuildFile; fileRef = A539069A16002B460059D53C /* HD Demon Bar 6x640.png */; };
 		D0BB030115F99A27003441D4 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB030015F99A27003441D4 /* QuartzCore.framework */; };
 		D0BB030315F99A27003441D4 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB030215F99A27003441D4 /* OpenGLES.framework */; };
 		D0BB030515F99A27003441D4 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB030415F99A27003441D4 /* OpenAL.framework */; };
@@ -153,6 +155,8 @@
 		21DA0E8916001FE900199182 /* orange-flower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "orange-flower.png"; sourceTree = "<group>"; };
 		A539068E160021EE0059D53C /* Background Green 480x320.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Background Green 480x320.png"; sourceTree = "<group>"; };
 		A539068F160021EE0059D53C /* Demon Bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Demon Bar.png"; sourceTree = "<group>"; };
+		A539069716002AB40059D53C /* HD Background Green 960x640.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HD Background Green 960x640.png"; sourceTree = "<group>"; };
+		A539069A16002B460059D53C /* HD Demon Bar 6x640.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HD Demon Bar 6x640.png"; sourceTree = "<group>"; };
 		D0BB02FC15F99A27003441D4 /* GravRockCollisions.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GravRockCollisions.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0BB030015F99A27003441D4 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		D0BB030215F99A27003441D4 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -497,7 +501,9 @@
 			isa = PBXGroup;
 			children = (
 				A539068E160021EE0059D53C /* Background Green 480x320.png */,
+				A539069716002AB40059D53C /* HD Background Green 960x640.png */,
 				A539068F160021EE0059D53C /* Demon Bar.png */,
+				A539069A16002B460059D53C /* HD Demon Bar 6x640.png */,
 				21DA0E8716001FE900199182 /* blue-flower.png */,
 				21DA0E8816001FE900199182 /* flower-purple.png */,
 				21DA0E8916001FE900199182 /* orange-flower.png */,
@@ -943,6 +949,8 @@
 				21DA0E8C16001FE900199182 /* orange-flower.png in Resources */,
 				A5390690160021EE0059D53C /* Background Green 480x320.png in Resources */,
 				A5390691160021EE0059D53C /* Demon Bar.png in Resources */,
+				A539069816002AB40059D53C /* HD Background Green 960x640.png in Resources */,
+				A539069B16002B460059D53C /* HD Demon Bar 6x640.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
