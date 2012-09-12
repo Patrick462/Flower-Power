@@ -22,6 +22,8 @@
 @property (retain) CCSprite *demonBar;
 @property (retain) NSDate *startTime;
 @property (assign) NSInteger score;
+@property (assign) BOOL levelComplete;
+@property (retain) CCLabelTTF *scoreLabel;
 @end
 
 #pragma mark - HelloWorldLayer
@@ -58,6 +60,7 @@
         blueFlowerCount = 0;
         orangeFlowerCount = 0;
         self.score = 0;
+        self.levelComplete = NO;
         
         [[SimpleAudioEngine sharedEngine] playBackgroundMusic:@"background-music-aac.wav"];
         
@@ -101,16 +104,34 @@
 
 - (void) startLevel
 {
+    [self removeChild:self.scoreLabel cleanup:YES];
     [self addFlowers:1];
     [self startTimer];
-    [self scheduleUpdate];
+    if (self.levelComplete) {
+        [self resumeSchedulerAndActions];
+    } else {
+        [self scheduleUpdate];
+    }
+    self.levelComplete = NO;
 }
 
 - (void) endLevel
 {
+    self.levelComplete = YES;
     [self stopTimer];
     [self pauseSchedulerAndActions];
+    [self showScore];
     NSLog(@"Flowers are segregated. You win! Your Score is: %d", self.score);
+}
+
+- (void) showScore
+{
+    NSString *string = [NSString stringWithFormat:@"Level Complete! Score %d", self.score];
+    CCLabelTTF *label = [CCLabelTTF labelWithString:string fontName:@"Marker Felt" fontSize:40];
+    label.position = ccp( _winsize.width/2, _winsize.height/2);
+    label.rotation = -90;
+    self.scoreLabel = label;
+    [self addChild:label];
 }
 
 - (void) update:(ccTime)dt {
@@ -283,7 +304,11 @@
 }
 
 -(BOOL) ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
-    [self showDemonBar];
+    if ( self.levelComplete) {
+        [self startLevel];
+    } else {
+        [self showDemonBar];
+    }
     return YES;
 }
 
