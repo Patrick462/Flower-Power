@@ -15,6 +15,11 @@
 #define ACCELEROMETER_INTERP_FACTOR 0.1f
 #define MAX_ROCKS 20
 
+@interface HelloWorldLayer()
+@property (assign) BOOL isFingerDown;
+@property (retain) CCSprite *demonBar;
+@end
+
 #pragma mark - HelloWorldLayer
 
 @implementation HelloWorldLayer
@@ -51,7 +56,7 @@
         // add the demon bar in the middle of the screen
         CCSprite *demonBar = [CCSprite spriteWithFile:@"Demon Bar.png"];
         [demonBar setPosition:ccp((_winsize.height) / 2, (_winsize.width / 2))];
-        [self addChild:demonBar z:1];
+        self.demonBar = demonBar;
         
         // load texture
         [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:texturePlist];
@@ -169,24 +174,28 @@
     }
 }
 
+# pragma mark - Demon Bar Management
+-(void) showDemonBar {
+    [self addChild:self.demonBar z:1];
+    self.isFingerDown = YES;
+}
+
+-(void) hideDemonBar {
+    [self.demonBar removeFromParentAndCleanup:YES];
+    self.isFingerDown = NO;
+}
+
 -(void) registerWithTouchDispatcher {
 	[[[CCDirector sharedDirector] touchDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
 }
 
 -(BOOL) ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
-    CGPoint pos = [self convertTouchToNodeSpace:touch];
-    CCLOG(@"touch (%.0f,%.0f)", pos.x, pos.y);
-    
-    // add rock to world
-    if (_rocks.count < MAX_ROCKS) {
-        Flower *rock = [self makeRock:pos];
-        [self addChild:rock z:1 tag:100 + _rocks.count];
-        
-        [_rocks addObject:rock];
-        CCLOG(@"add rock #%d", _rocks.count);
-    }
-    
+    [self showDemonBar];
     return YES;
+}
+
+-(void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event {
+    [self hideDemonBar];
 }
 
 -(Flower *) makeBlueFlower:(CGPoint)pos {
