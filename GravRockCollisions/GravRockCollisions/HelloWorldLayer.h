@@ -14,6 +14,7 @@
     CGPoint _accelerometer;
     CCArray *_rocks;
     CCSprite *_arrow;
+    int blueFlowerCount, orangeFlowerCount;
 }
 
 +(CCScene *) scene;
