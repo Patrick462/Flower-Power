@@ -18,6 +18,8 @@
 @interface HelloWorldLayer()
 @property (assign) BOOL isFingerDown;
 @property (retain) CCSprite *demonBar;
+@property (retain) NSDate *startTime;
+@property (assign) NSInteger score;
 @end
 
 #pragma mark - HelloWorldLayer
@@ -53,6 +55,7 @@
 	if( (self=[super init]) ) {
         blueFlowerCount = 0;
         orangeFlowerCount = 0;
+        self.score = 0;
         
         self.isTouchEnabled = YES;
         self.isAccelerometerEnabled = YES;
@@ -88,6 +91,7 @@
         _flowers = [[CCArray alloc] initWithCapacity:MAX_ROCKS];    
         
         [self addFlowers:1];
+        [self startTimer];
         [self scheduleUpdate];
 	}
 	return self;
@@ -194,6 +198,23 @@
         
         i++;
     }
+}
+
+# pragma mark - Timer 
+- (void) startTimer
+{
+    self.startTime = [NSDate dateWithTimeIntervalSinceNow:0];
+}
+
+#define kLevel 1
+#define kFactor 10
+#define kLevelTime 20
+
+- (void) stopTimer
+{
+    NSDate *stopTime = [NSDate dateWithTimeIntervalSinceNow:0];
+    NSTimeInterval elapsedTime = [stopTime timeIntervalSinceDate:self.startTime];
+    self.score = round(kLevel * kFactor * (kLevelTime - elapsedTime));
 }
 
 # pragma mark - Demon Bar Management
