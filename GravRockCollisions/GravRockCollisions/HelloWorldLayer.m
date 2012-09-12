@@ -107,6 +107,28 @@
             rock.vel = ccp(-rock.vel.x * BOUNCE_RESTITUTION, rock.vel.y);
         }
         
+        // bounce flower off of barrier if the barrier is there
+        if (self.isFingerDown)
+        {
+            // if traveling to the right, and close to the barrier but not beyond it, turn around
+            if    ((rock.position.x > (_winsize.width / 2) - rock.radius)
+                && (rock.position.x < (_winsize.width / 2))
+                && (rock.vel.x > 0))
+            {
+                rock.vel = ccp(-rock.vel.x * BOUNCE_RESTITUTION, rock.vel.y);
+            }
+            
+            // if traveling to the left, and close to the barrier but not beyond it, turn around
+            if    ((rock.position.x < (_winsize.width / 2) + rock.radius)
+                   && (rock.position.x > (_winsize.width / 2))
+                   && (rock.vel.x < 0))
+            {
+                rock.vel = ccp(-rock.vel.x * BOUNCE_RESTITUTION, rock.vel.y);
+            }
+            
+ 
+        }
+        
         // collide with other rocks
         for (int j = i + 1; j < _rocks.count; j++) {
             Flower *rock2 = [_rocks objectAtIndex:j];
