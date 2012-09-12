@@ -20,6 +20,8 @@
 @interface HelloWorldLayer()
 @property (assign) BOOL isFingerDown;
 @property (retain) CCSprite *demonBar;
+@property (retain) NSDate *startTime;
+@property (assign) NSInteger score;
 @end
 
 #pragma mark - HelloWorldLayer
@@ -55,6 +57,7 @@
 	if( (self=[super init]) ) {
         blueFlowerCount = 0;
         orangeFlowerCount = 0;
+        self.score = 0;
         
         self.isTouchEnabled = YES;
         self.isAccelerometerEnabled = YES;
@@ -90,6 +93,7 @@
         _flowers = [[CCArray alloc] initWithCapacity:MAX_ROCKS];    
         
         [self addFlowers:1];
+        [self startTimer];
         [self scheduleUpdate];
 	}
 	return self;
@@ -99,6 +103,13 @@
     Flower *flower;
     int i = 0;
     CCARRAY_FOREACH(_flowers, flower) {
+        CGFloat growthFactor = 1.001;
+        if ( flower.radius < _winsize.width / 6 ) {
+            flower.radius = flower.radius * growthFactor;
+            flower.scale = flower.scale * growthFactor;
+        }
+        
+
         // velocity verlet
         flower.position = ccpAdd(ccpAdd(flower.position, ccpMult(flower.vel, dt)), ccpMult(flower.acc, dt*dt));
         flower.vel = ccpAdd(flower.vel, ccpMult(flower.acc, dt));
@@ -219,12 +230,32 @@
     return NO;
 }
 
+# pragma mark - Timer 
+#define kLevel 1
+#define kFactor 10
+#define kLevelTime 20
+
+- (void) startTimer
+{
+    self.startTime = [NSDate dateWithTimeIntervalSinceNow:0];
+}
+
+- (void) stopTimer
+{
+    NSDate *stopTime = [NSDate dateWithTimeIntervalSinceNow:0];
+    NSTimeInterval elapsedTime = [stopTime timeIntervalSinceDate:self.startTime];
+    self.score = round(kLevel * kFactor * (kLevelTime - elapsedTime));
+}
+
+
 # pragma mark - Demon Bar Management
 -(void) showDemonBar {
     [self addChild:self.demonBar z:1];
     self.isFingerDown = YES;
     if ( [self areFlowersSegregated] ) {
-        NSLog(@"Flowers are segregated. You win!");
+        [self stopTimer];
+        NSLog(@"Flowers are segregated. You win! Your Score is: %d", self.score);
+        
     } else {
         NSLog(@"You still have mixed flowers. Fix it!");
     }
@@ -250,7 +281,7 @@
 
 -(Flower *) makeBlueFlower:(CGPoint)pos {
     blueFlowerCount++;
-    float scale = 0.3f;
+    float scale = 0.1f;
     NSString *flowerPath = [[NSBundle mainBundle]pathForResource:@"blue-flower" ofType:@"png" ];
     Flower *flower = [Flower spriteWithFile:flowerPath];
     flower.position = pos;
@@ -260,7 +291,7 @@
     flower.mass = 1.0f;
     flower.radius = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 1 : 0.5) * flower.boundingBox.size.width * scale;
     flower.rot = random() / 0x30000000 - 0.5;
-    flower.scale = 0.3;
+    flower.scale = scale;
     flower.tag = BLUE_FLOWER_TAG;
     CCLOG(@"Blue Flower: count %d, x %f, y%f",
           blueFlowerCount, flower.position.x, flower.position.y);
@@ -269,7 +300,7 @@
 
 -(Flower *) makeOrangeFlower:(CGPoint)pos {
     orangeFlowerCount++;
-    float scale = 0.3f;
+    float scale = 0.1f;
     NSString *flowerPath = [[NSBundle mainBundle]pathForResource:@"orange-flower" ofType:@"png" ];
     Flower *flower = [Flower spriteWithFile:flowerPath];
     flower.position = pos;
