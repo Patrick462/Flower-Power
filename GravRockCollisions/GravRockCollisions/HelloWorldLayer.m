@@ -8,7 +8,7 @@
 
 #import "HelloWorldLayer.h"
 #import "AppDelegate.h"
-#import "Rock.h"
+#import "Flower.h"
 
 #define PX_TO_M (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 50 : 25)
 #define BOUNCE_RESTITUTION 1.0f
@@ -63,7 +63,7 @@
 }
 
 - (void) update:(ccTime)dt {
-    Rock *rock;
+    Flower *rock;
     int i = 0;
     CCARRAY_FOREACH(_rocks, rock) {
         // velocity verlet
@@ -91,7 +91,7 @@
         
         // collide with other rocks
         for (int j = i + 1; j < _rocks.count; j++) {
-            Rock *rock2 = [_rocks objectAtIndex:j];
+            Flower *rock2 = [_rocks objectAtIndex:j];
             
             CGPoint delta = ccpSub(rock.position, rock2.position);
             
@@ -153,7 +153,7 @@
 
     // update gravity on each rock
     CGPoint grav = ccpMult(_accelerometer, -10.0f * PX_TO_M);
-    Rock *rock;
+    Flower *rock;
     CCARRAY_FOREACH(_rocks, rock) {
         rock.acc = grav;
     }
@@ -169,7 +169,7 @@
     
     // add rock to world
     if (_rocks.count < MAX_ROCKS) {
-        Rock *rock = [self makeRock:pos];
+        Flower *rock = [self makeRock:pos];
         [self addChild:rock z:1 tag:100 + _rocks.count];
         
         [_rocks addObject:rock];
@@ -179,49 +179,42 @@
     return YES;
 }
 
--(Rock *) makeAverageRock:(CGPoint)pos {
-    Rock *rock = [Rock spriteWithSpriteFrameName:@"rock.png"];
-    rock.position = pos;
+-(Flower *) makeBlueFlower:(CGPoint)pos {
+    float scale = 0.3f;
+    NSString *flowerPath = [[NSBundle mainBundle]pathForResource:@"blue-flower" ofType:@"png" ];
+    Flower *flower = [Flower spriteWithFile:flowerPath];
+    flower.position = pos;
     CGPoint initialVelocity = CGPointMake(random() % 200 - 100, random() % 200 - 100);
-    rock.vel = initialVelocity;
-    rock.acc = ccp(0,0);
-    rock.mass = 1.0f;
-    rock.radius = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 1 : 0.5) * rock.boundingBox.size.width;
-    rock.rot = random() / 0x10000000 - 0.5;
-    return rock;
+    flower.vel = initialVelocity;
+    flower.acc = ccp(0,0);
+    flower.mass = 1.0f;
+    flower.radius = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 1 : 0.5) * flower.boundingBox.size.width * scale;
+    flower.rot = random() / 0x30000000 - 0.5;
+    flower.scale = 0.3;
+    return flower;
 }
 
--(Rock *) makeBigRock:(CGPoint)pos {
-    Rock *rock = [Rock spriteWithSpriteFrameName:@"bigrock.png"];
-    rock.position = pos;
+-(Flower *) makeOrangeFlower:(CGPoint)pos {
+    float scale = 0.3f;
+    NSString *flowerPath = [[NSBundle mainBundle]pathForResource:@"orange-flower" ofType:@"png" ];
+    Flower *flower = [Flower spriteWithFile:flowerPath];
+    flower.position = pos;
     CGPoint initialVelocity = CGPointMake(random() % 150 - 75, random() % 150 - 75);
-    rock.vel = initialVelocity;
-    rock.acc = ccp(0,0);
-    rock.mass = 2.0f;
-    rock.radius = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 1 : 0.5) * rock.boundingBox.size.width;
-    rock.rot = random() / 0x10000000 - 0.5;
-    return rock;
+    flower.vel = initialVelocity;
+    flower.acc = ccp(0,0);
+    flower.mass = 2.0f;
+    flower.radius = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 1 : 0.5) * flower.boundingBox.size.width * scale;
+    flower.rot = random() / 0x30000000 - 0.5;
+    flower.scale = scale;
+    return flower;
 }
 
--(Rock *) makeGiantRock:(CGPoint)pos {
-    Rock *rock = [Rock spriteWithSpriteFrameName:@"giantrock.png"];
-    rock.position = pos;
-    CGPoint initialVelocity = CGPointMake(random() % 100 - 50, random() % 100 - 50);
-    rock.vel = initialVelocity;
-    rock.acc = ccp(0,0);
-    rock.mass = 3.0f;
-    rock.radius = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 1 : 0.5) * rock.boundingBox.size.width;
-    rock.rot = random() / 0x10000000 - 0.5;
-    return rock;
-}
-
--(Rock *) makeRock:(CGPoint)pos {
+-(Flower *) makeRock:(CGPoint)pos {
     int rockSize = random() % 3;
-    if ( rockSize < 1 ) return [self makeAverageRock:(pos)];
-    if ( rockSize < 2 ) return [self makeBigRock:(pos)];
-    if ( rockSize < 3 ) return [self makeGiantRock:(pos)];
+    if ( rockSize < 1 ) return [self makeBlueFlower:(pos)];
+    if ( rockSize < 2 ) return [self makeOrangeFlower:(pos)];
     NSLog(@"WTF");
-    return [self makeAverageRock:pos];
+    return [self makeBlueFlower:pos];
 }
 
 - (void) dealloc {
