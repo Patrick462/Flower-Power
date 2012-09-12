@@ -14,6 +14,8 @@
 #define BOUNCE_RESTITUTION 1.0f
 #define ACCELEROMETER_INTERP_FACTOR 0.1f
 #define MAX_ROCKS 20
+#define BLUE_FLOWER_TAG 1
+#define ORANGE_FLOWER_TAG 2
 
 @interface HelloWorldLayer()
 @property (assign) BOOL isFingerDown;
@@ -196,10 +198,36 @@
     }
 }
 
+-(BOOL)flowerIsOnLeft:(CCSprite*)flower {
+    return flower.position.y < ( _winsize.height / 2 );
+}
+
+-(BOOL) areFlowersSegregated {
+    CCSprite *lastFlower = [_flowers lastObject];
+    BOOL lastFlowerIsOnLeft = [self flowerIsOnLeft:lastFlower];
+    if ( lastFlower != nil ) {
+        for (NSInteger i = 0; i < [_flowers count] - 1; i++) {
+            CCSprite *flower = [_flowers objectAtIndex:i];
+            if ( flower.tag == lastFlower.tag ) {
+                if ( [self flowerIsOnLeft:flower] != lastFlowerIsOnLeft ) return NO;
+            } else {
+                if ( [self flowerIsOnLeft:flower] == lastFlowerIsOnLeft ) return NO;
+            }
+            return YES;
+        }
+    }
+    return NO;
+}
+
 # pragma mark - Demon Bar Management
 -(void) showDemonBar {
     [self addChild:self.demonBar z:1];
     self.isFingerDown = YES;
+    if ( [self areFlowersSegregated] ) {
+        NSLog(@"Flowers are segregated. You win!");
+    } else {
+        NSLog(@"You still have mixed flowers. Fix it!");
+    }
 }
 
 -(void) hideDemonBar {
@@ -233,6 +261,7 @@
     flower.radius = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 1 : 0.5) * flower.boundingBox.size.width * scale;
     flower.rot = random() / 0x30000000 - 0.5;
     flower.scale = 0.3;
+    flower.tag = BLUE_FLOWER_TAG;
     CCLOG(@"Blue Flower: count %d, x %f, y%f",
           blueFlowerCount, flower.position.x, flower.position.y);
     return flower;
@@ -251,6 +280,7 @@
     flower.radius = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 1 : 0.5) * flower.boundingBox.size.width * scale;
     flower.rot = random() / 0x30000000 - 0.5;
     flower.scale = scale;
+    flower.tag = ORANGE_FLOWER_TAG;
     CCLOG(@"Orange Flower: count %d, x %f, y%f",
           orangeFlowerCount, flower.position.x, flower.position.y);
 
