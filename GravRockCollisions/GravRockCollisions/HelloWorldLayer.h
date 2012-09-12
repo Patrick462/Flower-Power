@@ -7,6 +7,7 @@
 //
 
 #import "cocos2d.h"
+#import <AVFoundation/AVFoundation.h>
 @class Flower;
 
 @interface HelloWorldLayer : CCLayer {
@@ -14,6 +15,8 @@
     CGPoint _accelerometer;
     CCArray *_flowers;
     int blueFlowerCount, orangeFlowerCount;
+    AVAudioPlayer * audioPlayer;
+
 }
 
 +(CCScene *) scene;
