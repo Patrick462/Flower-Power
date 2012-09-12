@@ -223,7 +223,7 @@
     int rockSize = random() % 3;
     if ( rockSize < 1 ) return [self makeBlueFlower:(pos)];
     if ( rockSize < 2 ) return [self makeOrangeFlower:(pos)];
-    NSLog(@"WTF");
+    NSLog(@"rockSize: %d", rockSize);
     return [self makeBlueFlower:pos];
 }
 
