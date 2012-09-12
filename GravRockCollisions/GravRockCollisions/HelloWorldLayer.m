@@ -43,6 +43,11 @@
             textureFile = @"tex-hd.png";
         }
         
+        // put up the green background
+        CCSprite *greenBackground = [CCSprite spriteWithFile:@"Background Green 480x320.png"];
+        [greenBackground setPosition:ccp((_winsize.width / 2), (_winsize.height / 2))];
+        [self addChild:greenBackground z:0];
+        
         // load texture
         [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:texturePlist];
         CCSpriteBatchNode *sheet = [CCSpriteBatchNode batchNodeWithFile:textureFile];
