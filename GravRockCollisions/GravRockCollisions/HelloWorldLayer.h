@@ -12,8 +12,7 @@
 @interface HelloWorldLayer : CCLayer {
     CGSize _winsize;
     CGPoint _accelerometer;
-    CCArray *_rocks;
-    CCSprite *_arrow;
+    CCArray *_flowers;
     int blueFlowerCount, orangeFlowerCount;
 }
 

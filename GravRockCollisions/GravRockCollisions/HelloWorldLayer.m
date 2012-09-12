@@ -31,6 +31,24 @@
 	return scene;
 }
 
+-(CGPoint)randomPoint {
+    _winsize = [[CCDirector sharedDirector] winSize];
+    return CGPointMake( arc4random_uniform(_winsize.width), arc4random_uniform(_winsize.height));
+}
+
+-(void) addFlowers:(NSUInteger)count {
+    for (NSUInteger i = 0; i < count; i++) {
+        
+        Flower *blueFlower = [self makeBlueFlower:[self randomPoint]];
+        [self addChild:blueFlower];
+        [_flowers addObject:blueFlower];
+        
+        Flower *orangeFlower = [self makeOrangeFlower:[self randomPoint]];
+        [self addChild:orangeFlower];
+        [_flowers addObject:orangeFlower];
+    }
+}
+
 -(id) init {
 	if( (self=[super init]) ) {
         blueFlowerCount = 0;
@@ -67,80 +85,75 @@
         [self addChild:sheet];
         
         // init rocks array
-        _rocks = [[CCArray alloc] initWithCapacity:MAX_ROCKS];    
+        _flowers = [[CCArray alloc] initWithCapacity:MAX_ROCKS];    
         
-//        // init arrow
-//        _arrow = [CCSprite spriteWithSpriteFrameName:@"arrow.png"];
-//        _arrow.position = ccp(_winsize.width/2, _winsize.height/2);
-//        _arrow.anchorPoint = ccp(0.25f,0.5f);
-//        [self addChild:_arrow z:2 tag:234];
-
+        [self addFlowers:1];
         [self scheduleUpdate];
 	}
 	return self;
 }
 
 - (void) update:(ccTime)dt {
-    Flower *rock;
+    Flower *flower;
     int i = 0;
-    CCARRAY_FOREACH(_rocks, rock) {
+    CCARRAY_FOREACH(_flowers, flower) {
         // velocity verlet
-        rock.position = ccpAdd(ccpAdd(rock.position, ccpMult(rock.vel, dt)), ccpMult(rock.acc, dt*dt));
-        rock.vel = ccpAdd(rock.vel, ccpMult(rock.acc, dt));
-        rock.rotation = rock.rotation + rock.rot;
+        flower.position = ccpAdd(ccpAdd(flower.position, ccpMult(flower.vel, dt)), ccpMult(flower.acc, dt*dt));
+        flower.vel = ccpAdd(flower.vel, ccpMult(flower.acc, dt));
+        flower.rotation = flower.rotation + flower.rot;
 
         // bounce the rock off the walls
-        if (rock.position.y < rock.radius) {
-            rock.position = ccp(rock.position.x, rock.radius);
-            rock.vel = ccp(rock.vel.x, -rock.vel.y * BOUNCE_RESTITUTION);
+        if (flower.position.y < flower.radius) {
+            flower.position = ccp(flower.position.x, flower.radius);
+            flower.vel = ccp(flower.vel.x, -flower.vel.y * BOUNCE_RESTITUTION);
         }
-        if (rock.position.y > (_winsize.height - rock.radius)) {
-            rock.position = ccp(rock.position.x, _winsize.height - rock.radius);
-            rock.vel = ccp(rock.vel.x, -rock.vel.y * BOUNCE_RESTITUTION); 
+        if (flower.position.y > (_winsize.height - flower.radius)) {
+            flower.position = ccp(flower.position.x, _winsize.height - flower.radius);
+            flower.vel = ccp(flower.vel.x, -flower.vel.y * BOUNCE_RESTITUTION); 
         }
-        if (rock.position.x < rock.radius) {
-            rock.position = ccp(rock.radius, rock.position.y); 
-            rock.vel = ccp(-rock.vel.x * BOUNCE_RESTITUTION, rock.vel.y); 
+        if (flower.position.x < flower.radius) {
+            flower.position = ccp(flower.radius, flower.position.y); 
+            flower.vel = ccp(-flower.vel.x * BOUNCE_RESTITUTION, flower.vel.y); 
         }
-        if (rock.position.x > _winsize.width - rock.radius) {
-            rock.position = ccp(_winsize.width - rock.radius, rock.position.y); 
-            rock.vel = ccp(-rock.vel.x * BOUNCE_RESTITUTION, rock.vel.y);
+        if (flower.position.x > _winsize.width - flower.radius) {
+            flower.position = ccp(_winsize.width - flower.radius, flower.position.y); 
+            flower.vel = ccp(-flower.vel.x * BOUNCE_RESTITUTION, flower.vel.y);
         }
         
         // collide with other rocks
-        for (int j = i + 1; j < _rocks.count; j++) {
-            Flower *rock2 = [_rocks objectAtIndex:j];
+        for (int j = i + 1; j < _flowers.count; j++) {
+            Flower *flower2 = [_flowers objectAtIndex:j];
             
-            CGPoint delta = ccpSub(rock.position, rock2.position);
+            CGPoint delta = ccpSub(flower.position, flower2.position);
             
             // assume rocks are circles to make collision math easy
-            float collisionDistSQ = (rock.radius + rock2.radius) * (rock.radius + rock2.radius);
+            float collisionDistSQ = (flower.radius + flower2.radius) * (flower.radius + flower2.radius);
             float distSQ = ccpDot(delta, delta);
             //CCLOG(@"before pos: (%.3f,%.3f) (%.3f,%.3f)",rock.position.x,rock.position.y,rock2.position.x,rock2.position.y);                       
             //CCLOG(@"before vel: (%.3f,%.3f) (%.3f,%.3f)",rock.vel.x,rock.vel.y,rock2.vel.x,rock2.vel.y);
             if (distSQ <= collisionDistSQ) {  
                 // compute separation vector -- distance need to push rocks appart
                 float d = ccpLength(delta);
-                CGPoint sep = ccpMult(delta, ((rock.radius + rock2.radius) - d)/d);
+                CGPoint sep = ccpMult(delta, ((flower.radius + flower2.radius) - d)/d);
                 
                 // compute sum of masses
-                float sum = rock.mass + rock2.mass;
+                float sum = flower.mass + flower2.mass;
                 
                 // pull both rocks apart weighted by their mass
-                rock.position = ccpAdd(rock.position, ccpMult(sep, rock2.mass / sum));
-                rock2.position = ccpSub(rock2.position, ccpMult(sep, rock.mass / sum));
+                flower.position = ccpAdd(flower.position, ccpMult(sep, flower2.mass / sum));
+                flower2.position = ccpSub(flower2.position, ccpMult(sep, flower.mass / sum));
                 
                 // compute normal unit and tangential unit vectors
                 CGPoint normUnit = ccpNormalize(sep);
                 CGPoint tanUnit = ccpPerp(normUnit);
                 
                 // project v1 & v2 into normal & tangential space
-                CGPoint v = ccp(ccpDot(normUnit, rock.vel), ccpDot(tanUnit, rock.vel));
-                CGPoint v2 = ccp(ccpDot(normUnit, rock2.vel), ccpDot(tanUnit, rock2.vel));
+                CGPoint v = ccp(ccpDot(normUnit, flower.vel), ccpDot(tanUnit, flower.vel));
+                CGPoint v2 = ccp(ccpDot(normUnit, flower2.vel), ccpDot(tanUnit, flower2.vel));
                 
                 // tangential is preserved, normal is elastic collision
-                CGPoint vFinal = ccp( (BOUNCE_RESTITUTION * rock2.mass * (v2.x - v.x) + rock.mass * v.x + rock2.mass * v2.x) / sum, v.y);
-                CGPoint v2Final = ccp( (BOUNCE_RESTITUTION * rock.mass * (v.x - v2.x) + rock.mass * v.x + rock2.mass * v2.x) / sum, v2.y);
+                CGPoint vFinal = ccp( (BOUNCE_RESTITUTION * flower2.mass * (v2.x - v.x) + flower.mass * v.x + flower2.mass * v2.x) / sum, v.y);
+                CGPoint v2Final = ccp( (BOUNCE_RESTITUTION * flower.mass * (v.x - v2.x) + flower.mass * v.x + flower2.mass * v2.x) / sum, v2.y);
                 
                 // project back to real space
                 CGPoint vBackN = ccpMult(normUnit, vFinal.x);
@@ -149,8 +162,8 @@
                 CGPoint v2BackT = ccpMult(tanUnit, v2Final.y);
                 
                 // sum Normal + Tangential velocities to get the final velocity
-                rock.vel = ccpAdd(vBackN, vBackT);
-                rock2.vel = ccpAdd(v2BackN, v2BackT);
+                flower.vel = ccpAdd(vBackN, vBackT);
+                flower2.vel = ccpAdd(v2BackN, v2BackT);
             }
             
             //CCLOG(@"after pos: (%.3f,%.3f) (%.3f,%.3f)",rock.position.x,rock.position.y,rock2.position.x,rock2.position.y);                       
@@ -166,13 +179,11 @@
     float angle = -CC_RADIANS_TO_DEGREES(ccpToAngle(_accelerometer));
     CCLOG(@"ang=%.3f mag=%.5f", angle, ccpLength(_accelerometer));
     
-    // rotate arrow
-    _arrow.rotation = angle + 180.0f;
 
     // update gravity on each rock
     CGPoint grav = ccpMult(_accelerometer, -10.0f * PX_TO_M);
     Flower *rock;
-    CCARRAY_FOREACH(_rocks, rock) {
+    CCARRAY_FOREACH(_flowers, rock) {
         rock.acc = grav;
     }
 }
@@ -238,16 +249,8 @@
     return flower;
 }
 
--(Flower *) makeRock:(CGPoint)pos {
-    int rockSize = random() % 3;
-    if ( rockSize < 1 ) return [self makeBlueFlower:(pos)];
-    if ( rockSize < 2 ) return [self makeOrangeFlower:(pos)];
-    NSLog(@"rockSize: %d", rockSize);
-    return [self makeBlueFlower:pos];
-}
-
 - (void) dealloc {
-    [_rocks release]; _rocks = nil;
+    [_flowers release]; _flowers = nil;
 	[super dealloc];
 }
 
