@@ -7,7 +7,7 @@
 //
 
 #import "cocos2d.h"
-@class Rock;
+@class Flower;
 
 @interface HelloWorldLayer : CCLayer {
     CGSize _winsize;

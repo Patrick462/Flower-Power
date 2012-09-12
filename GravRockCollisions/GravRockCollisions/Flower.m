@@ -6,9 +6,9 @@
 //  Copyright Saturnboy. All rights reserved.
 //
 
-#import "Rock.h"
+#import "Flower.h"
 
-@implementation Rock
+@implementation Flower
 
 @synthesize vel, acc, radius, mass;
 

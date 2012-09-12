@@ -144,7 +144,7 @@
 		D0BB04A715F99C8A003441D4 /* tex-hd.png in Resources */ = {isa = PBXBuildFile; fileRef = D0BB049E15F99C8A003441D4 /* tex-hd.png */; };
 		D0BB04A815F99C8A003441D4 /* tex.plist in Resources */ = {isa = PBXBuildFile; fileRef = D0BB049F15F99C8A003441D4 /* tex.plist */; };
 		D0BB04A915F99C8A003441D4 /* tex.png in Resources */ = {isa = PBXBuildFile; fileRef = D0BB04A015F99C8A003441D4 /* tex.png */; };
-		D0BB04B115F99EC0003441D4 /* Rock.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB04B015F99EC0003441D4 /* Rock.m */; };
+		D0BB04B115F99EC0003441D4 /* Flower.m in Sources */ = {isa = PBXBuildFile; fileRef = D0BB04B015F99EC0003441D4 /* Flower.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -420,8 +420,8 @@
 		D0BB049E15F99C8A003441D4 /* tex-hd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tex-hd.png"; path = "Resources/tex-hd.png"; sourceTree = "<group>"; };
 		D0BB049F15F99C8A003441D4 /* tex.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = tex.plist; path = Resources/tex.plist; sourceTree = "<group>"; };
 		D0BB04A015F99C8A003441D4 /* tex.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tex.png; path = Resources/tex.png; sourceTree = "<group>"; };
-		D0BB04AF15F99EC0003441D4 /* Rock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rock.h; sourceTree = "<group>"; };
-		D0BB04B015F99EC0003441D4 /* Rock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Rock.m; sourceTree = "<group>"; };
+		D0BB04AF15F99EC0003441D4 /* Flower.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Flower.h; sourceTree = "<group>"; };
+		D0BB04B015F99EC0003441D4 /* Flower.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Flower.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -484,8 +484,8 @@
 				D0BB048B15F99A29003441D4 /* AppDelegate.m */,
 				D0BB048D15F99A29003441D4 /* HelloWorldLayer.h */,
 				D0BB048E15F99A29003441D4 /* HelloWorldLayer.m */,
-				D0BB04AF15F99EC0003441D4 /* Rock.h */,
-				D0BB04B015F99EC0003441D4 /* Rock.m */,
+				D0BB04AF15F99EC0003441D4 /* Flower.h */,
+				D0BB04B015F99EC0003441D4 /* Flower.m */,
 				D0BB031315F99A27003441D4 /* Resources */,
 				D0BB032D15F99A27003441D4 /* libs */,
 				D0BB048615F99A29003441D4 /* Supporting Files */,
@@ -1056,7 +1056,7 @@
 				D0BB048915F99A29003441D4 /* main.m in Sources */,
 				D0BB048C15F99A29003441D4 /* AppDelegate.m in Sources */,
 				D0BB048F15F99A29003441D4 /* HelloWorldLayer.m in Sources */,
-				D0BB04B115F99EC0003441D4 /* Rock.m in Sources */,
+				D0BB04B115F99EC0003441D4 /* Flower.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

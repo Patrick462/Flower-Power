@@ -8,7 +8,7 @@
 
 #import "cocos2d.h"
 
-@interface Rock : CCSprite {
+@interface Flower : CCSprite {
 	CGPoint vel;
     CGPoint acc;
     float radius;
