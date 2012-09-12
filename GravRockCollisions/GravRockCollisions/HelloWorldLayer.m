@@ -183,21 +183,21 @@
     }
 }
 
-- (void) accelerometer:(UIAccelerometer *)accelerometer didAccelerate:(UIAcceleration *)acceleration {    
-    _accelerometer = ccpLerp(_accelerometer, ccp(-acceleration.x, -acceleration.y), ACCELEROMETER_INTERP_FACTOR);
-    float angle = -CC_RADIANS_TO_DEGREES(ccpToAngle(_accelerometer));
-    CCLOG(@"ang=%.3f mag=%.5f", angle, ccpLength(_accelerometer));
-    
-    // rotate arrow
-    _arrow.rotation = angle + 180.0f;
-
-    // update gravity on each rock
-    CGPoint grav = ccpMult(_accelerometer, -10.0f * PX_TO_M);
-    Flower *rock;
-    CCARRAY_FOREACH(_rocks, rock) {
-        rock.acc = grav;
-    }
-}
+//- (void) accelerometer:(UIAccelerometer *)accelerometer didAccelerate:(UIAcceleration *)acceleration {    
+//    _accelerometer = ccpLerp(_accelerometer, ccp(-acceleration.x, -acceleration.y), ACCELEROMETER_INTERP_FACTOR);
+//    float angle = -CC_RADIANS_TO_DEGREES(ccpToAngle(_accelerometer));
+//    CCLOG(@"ang=%.3f mag=%.5f", angle, ccpLength(_accelerometer));
+//    
+//    // rotate arrow
+//    _arrow.rotation = angle + 180.0f;
+//
+//    // update gravity on each rock
+//    CGPoint grav = ccpMult(_accelerometer, -10.0f * PX_TO_M);
+//    Flower *rock;
+//    CCARRAY_FOREACH(_rocks, rock) {
+//        rock.acc = grav;
+//    }
+//}
 
 # pragma mark - Demon Bar Management
 -(void) showDemonBar {
