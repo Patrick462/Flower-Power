@@ -62,7 +62,7 @@
         [[SimpleAudioEngine sharedEngine] playBackgroundMusic:@"background-music-aac.wav"];
         
         self.isTouchEnabled = YES;
-        self.isAccelerometerEnabled = YES;
+//        self.isAccelerometerEnabled = YES;
         
         // compute window size
 		_winsize = [[CCDirector sharedDirector] winSize];
