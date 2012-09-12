@@ -4,7 +4,7 @@
 //
 //  Created by Justin Shacklette on 9/6/12.
 //  Copyright Saturnboy 2012. All rights reserved.
-//
+//  Flower code by Sean McManus, James Stewart, Patrick Weigel
 
 #import "HelloWorldLayer.h"
 #import "AppDelegate.h"
@@ -126,19 +126,19 @@
         if (self.isFingerDown)
         {
             // if traveling to the right, and close to the barrier but not beyond it, turn around
-            if    ((flower.position.x > (_winsize.width / 2) - flower.radius)
-                && (flower.position.x < (_winsize.width / 2))
-                && (flower.vel.x > 0))
+            if    ((flower.position.y > (_winsize.height / 2) - flower.radius)
+                && (flower.position.y < (_winsize.height / 2))
+                && (flower.vel.y > 0))
             {
-                flower.vel = ccp(-flower.vel.x * BOUNCE_RESTITUTION, flower.vel.y);
+                flower.vel = ccp(flower.vel.x, -flower.vel.y * BOUNCE_RESTITUTION);
             }
             
             // if traveling to the left, and close to the barrier but not beyond it, turn around
-            if    ((flower.position.x < (_winsize.width / 2) + flower.radius)
-                   && (flower.position.x > (_winsize.width / 2))
-                   && (flower.vel.x < 0))
+            if    ((flower.position.y < (_winsize.height / 2) + flower.radius)
+                   && (flower.position.y > (_winsize.height / 2))
+                   && (flower.vel.y < 0))
             {
-                flower.vel = ccp(-flower.vel.x * BOUNCE_RESTITUTION, flower.vel.y);
+                flower.vel = ccp(flower.vel.x, -flower.vel.y * BOUNCE_RESTITUTION);
             }
             
  
