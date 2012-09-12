@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		21DA0E8A16001FE900199182 /* blue-flower.png in Resources */ = {isa = PBXBuildFile; fileRef = 21DA0E8716001FE900199182 /* blue-flower.png */; };
+		21DA0E8B16001FE900199182 /* flower-purple.png in Resources */ = {isa = PBXBuildFile; fileRef = 21DA0E8816001FE900199182 /* flower-purple.png */; };
+		21DA0E8C16001FE900199182 /* orange-flower.png in Resources */ = {isa = PBXBuildFile; fileRef = 21DA0E8916001FE900199182 /* orange-flower.png */; };
 		D0BB030115F99A27003441D4 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB030015F99A27003441D4 /* QuartzCore.framework */; };
 		D0BB030315F99A27003441D4 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB030215F99A27003441D4 /* OpenGLES.framework */; };
 		D0BB030515F99A27003441D4 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0BB030415F99A27003441D4 /* OpenAL.framework */; };
@@ -143,6 +146,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		21DA0E8716001FE900199182 /* blue-flower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blue-flower.png"; sourceTree = "<group>"; };
+		21DA0E8816001FE900199182 /* flower-purple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flower-purple.png"; sourceTree = "<group>"; };
+		21DA0E8916001FE900199182 /* orange-flower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "orange-flower.png"; sourceTree = "<group>"; };
 		D0BB02FC15F99A27003441D4 /* GravRockCollisions.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GravRockCollisions.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0BB030015F99A27003441D4 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		D0BB030215F99A27003441D4 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -486,6 +492,9 @@
 		D0BB031315F99A27003441D4 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				21DA0E8716001FE900199182 /* blue-flower.png */,
+				21DA0E8816001FE900199182 /* flower-purple.png */,
+				21DA0E8916001FE900199182 /* orange-flower.png */,
 				D0BB049D15F99C8A003441D4 /* tex-hd.plist */,
 				D0BB049E15F99C8A003441D4 /* tex-hd.png */,
 				D0BB049F15F99C8A003441D4 /* tex.plist */,
@@ -923,6 +932,9 @@
 				D0BB04A715F99C8A003441D4 /* tex-hd.png in Resources */,
 				D0BB04A815F99C8A003441D4 /* tex.plist in Resources */,
 				D0BB04A915F99C8A003441D4 /* tex.png in Resources */,
+				21DA0E8A16001FE900199182 /* blue-flower.png in Resources */,
+				21DA0E8B16001FE900199182 /* flower-purple.png in Resources */,
+				21DA0E8C16001FE900199182 /* orange-flower.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
