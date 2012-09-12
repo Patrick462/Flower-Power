@@ -92,13 +92,25 @@
         [self addChild:sheet];
         
         // init rocks array
-        _flowers = [[CCArray alloc] initWithCapacity:MAX_ROCKS];    
+        _flowers = [[CCArray alloc] initWithCapacity:MAX_ROCKS];
         
-        [self addFlowers:1];
-        [self startTimer];
-        [self scheduleUpdate];
-	}
+        [self startLevel];
+ 	}
 	return self;
+}
+
+- (void) startLevel
+{
+    [self addFlowers:1];
+    [self startTimer];
+    [self scheduleUpdate];
+}
+
+- (void) endLevel
+{
+    [self stopTimer];
+    [self pauseSchedulerAndActions];
+    NSLog(@"Flowers are segregated. You win! Your Score is: %d", self.score);
 }
 
 - (void) update:(ccTime)dt {
@@ -255,9 +267,7 @@
     [self addChild:self.demonBar z:1];
     self.isFingerDown = YES;
     if ( [self areFlowersSegregated] ) {
-        [self stopTimer];
-        NSLog(@"Flowers are segregated. You win! Your Score is: %d", self.score);
-        
+        [self endLevel];        
     } else {
         NSLog(@"You still have mixed flowers. Fix it!");
     }
