@@ -43,7 +43,7 @@
 //    CCLOG(@"HWL/randomPoint windowsize: _%.0fx%.0f", _winsize.width, _winsize.height);
     u_int32_t randomX = arc4random_uniform(_winsize.width);
     u_int32_t randomY = arc4random_uniform(_winsize.height);
-    CCLOG(@"HWL/randomPoint x:%4d, y:%4d", randomX, randomY);
+    CCLOG(@"HWL/randomPoint                  x:%4d,   y:%4d", randomX, randomY);
     
     return CGPointMake(randomX, randomY);
 }
@@ -370,7 +370,7 @@
     NSString *flowerPath = [[NSBundle mainBundle]pathForResource:@"orange-flower" ofType:@"png" ];
     Flower *flower = [Flower spriteWithFile:flowerPath];
     flower.position = pos;
-    CGPoint initialVelocity = CGPointMake(random() % 150 - 75, random() % 150 - 75);
+    CGPoint initialVelocity = CGPointMake(arc4random_uniform(150) - 75, arc4random_uniform(150) - 75);
     flower.vel = initialVelocity;
     flower.acc = ccp(0,0);
     flower.mass = 2.0f;
