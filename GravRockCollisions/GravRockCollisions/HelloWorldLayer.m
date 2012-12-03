@@ -31,6 +31,7 @@
 @implementation HelloWorldLayer
 
 +(CCScene *) scene {
+    CCLOG(@"HWL/scene");
 	CCScene *scene = [CCScene node];
 	HelloWorldLayer *layer = [HelloWorldLayer node];
 	[scene addChild: layer];
@@ -38,11 +39,17 @@
 }
 
 -(CGPoint)randomPoint {
-    _winsize = [[CCDirector sharedDirector] winSize];
-    return CGPointMake( arc4random_uniform(_winsize.width), arc4random_uniform(_winsize.height));
+//    _winsize = [[CCDirector sharedDirector] winSize];
+//    CCLOG(@"HWL/randomPoint windowsize: _%.0fx%.0f", _winsize.width, _winsize.height);
+    u_int32_t randomX = arc4random_uniform(_winsize.width);
+    u_int32_t randomY = arc4random_uniform(_winsize.height);
+    CCLOG(@"HWL/randomPoint x:%4d, y:%4d", randomX, randomY);
+    
+    return CGPointMake(randomX, randomY);
 }
 
 -(void) addFlowers:(NSUInteger)count {
+    CCLOG(@"HWL/addFlowers");
     for (NSUInteger i = 0; i < count; i++) {
         
         Flower *blueFlower = [self makeBlueFlower:[self randomPoint]];
@@ -56,6 +63,8 @@
 }
 
 -(id) init {
+    CCLOG(@"HWL/init");
+    firstCallToUpdate = YES;
 	if( (self=[super init]) ) {
         blueFlowerCount = 0;
         orangeFlowerCount = 0;
@@ -69,7 +78,7 @@
         
         // compute window size
 		_winsize = [[CCDirector sharedDirector] winSize];
-        CCLOG(@"window : size=%.0fx%.0f", _winsize.width, _winsize.height);
+        CCLOG(@"HWL/init windowsize: _%.0fx%.0f", _winsize.width, _winsize.height);
         
         // compute texture filename
         NSString *texturePlist = @"tex.plist";
@@ -104,6 +113,7 @@
 
 - (void) startLevel
 {
+    CCLOG(@"HWL/startLevel");
     [self removeChild:self.scoreLabel cleanup:YES];
     [self addFlowers:1];
     [self startTimer];
@@ -117,6 +127,7 @@
 
 - (void) endLevel
 {
+    CCLOG(@"HWL/endLevel");
     self.levelComplete = YES;
     [self stopTimer];
     [self pauseSchedulerAndActions];
@@ -126,6 +137,7 @@
 
 - (void) showScore
 {
+    CCLOG(@"HWL/showScore");
     NSString *string = [NSString stringWithFormat:@"Level Complete! Score %d", self.score];
     CCLabelTTF *label = [CCLabelTTF labelWithString:string fontName:@"Marker Felt" fontSize:40];
     label.position = ccp( _winsize.width/2, _winsize.height/2);
@@ -135,6 +147,10 @@
 }
 
 - (void) update:(ccTime)dt {
+    if (firstCallToUpdate) {
+        CCLOG(@"HWL/update first cal");
+        firstCallToUpdate = NO;
+    }
     Flower *flower;
     int i = 0;
     CCARRAY_FOREACH(_flowers, flower) {
@@ -245,10 +261,12 @@
 }
 
 -(BOOL)flowerIsOnLeft:(CCSprite*)flower {
+    CCLOG(@"HWL/flowerIsOnLeft");
     return flower.position.y < ( _winsize.height / 2 );
 }
 
 -(BOOL) areFlowersSegregated {
+    CCLOG(@"HWL/areFlowersSegregated");
     CCSprite *lastFlower = [_flowers lastObject];
     BOOL lastFlowerIsOnLeft = [self flowerIsOnLeft:lastFlower];
     if ( lastFlower != nil ) {
@@ -272,11 +290,15 @@
 
 - (void) startTimer
 {
+    CCLOG(@"HWL/startTimer");
+
     self.startTime = [NSDate dateWithTimeIntervalSinceNow:0];
 }
 
 - (void) stopTimer
 {
+    CCLOG(@"HWL/stopTimer");
+
     NSDate *stopTime = [NSDate dateWithTimeIntervalSinceNow:0];
     NSTimeInterval elapsedTime = [stopTime timeIntervalSinceDate:self.startTime];
     self.score = round(kLevel * kFactor * (kLevelTime - elapsedTime));
@@ -285,6 +307,7 @@
 
 # pragma mark - Demon Bar Management
 -(void) showDemonBar {
+    CCLOG(@"HWL/showDemonBar");
     [self addChild:self.demonBar z:1];
     self.isFingerDown = YES;
     if ( [self areFlowersSegregated] ) {
@@ -295,15 +318,19 @@
 }
 
 -(void) hideDemonBar {
+    CCLOG(@"HWL/hideDemonBar");
     [self.demonBar removeFromParentAndCleanup:YES];
     self.isFingerDown = NO;
 }
 
+#pragma mark - Other
 -(void) registerWithTouchDispatcher {
+    CCLOG(@"HWL/registerWithTouchDispatcher");
 	[[[CCDirector sharedDirector] touchDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
 }
 
 -(BOOL) ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
+    CCLOG(@"HWL/ccTouchBegan");
     if ( self.levelComplete) {
         [self startLevel];
     } else {
@@ -313,6 +340,7 @@
 }
 
 -(void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event {
+    CCLOG(@"HWL/ccTouchEnded");
     [self hideDemonBar];
 }
 
@@ -322,15 +350,16 @@
     NSString *flowerPath = [[NSBundle mainBundle]pathForResource:@"blue-flower" ofType:@"png" ];
     Flower *flower = [Flower spriteWithFile:flowerPath];
     flower.position = pos;
-    CGPoint initialVelocity = CGPointMake(random() % 200 - 100, random() % 200 - 100);
+    CGPoint initialVelocity = CGPointMake(arc4random_uniform(200) - 100, arc4random_uniform(200) - 100);
     flower.vel = initialVelocity;
     flower.acc = ccp(0,0);
     flower.mass = 1.0f;
-    flower.radius = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 1 : 0.5) * flower.boundingBox.size.width * scale;
+    flower.radius = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 1 : 0.5)
+                    * flower.boundingBox.size.width * scale;
     flower.rot = random() / 0x30000000 - 0.5;
     flower.scale = scale;
     flower.tag = BLUE_FLOWER_TAG;
-    CCLOG(@"Blue Flower: count %d, x %f, y%f",
+    CCLOG(@"HWL/makeBlueFlower   count:%4d, x:%6.1f, y:%6.1f",
           blueFlowerCount, flower.position.x, flower.position.y);
     return flower;
 }
@@ -349,7 +378,7 @@
     flower.rot = random() / 0x30000000 - 0.5;
     flower.scale = scale;
     flower.tag = ORANGE_FLOWER_TAG;
-    CCLOG(@"Orange Flower: count %d, x %f, y%f",
+    CCLOG(@"HWL/makeOrangeFlower count:%4d, x:%6.1f, y:%6.1f",
           orangeFlowerCount, flower.position.x, flower.position.y);
 
     return flower;

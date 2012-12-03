@@ -16,7 +16,7 @@
     CGPoint _accelerometer;
     CCArray *_flowers;
     int blueFlowerCount, orangeFlowerCount;
-
+    BOOL firstCallToUpdate;
 }
 
 +(CCScene *) scene;

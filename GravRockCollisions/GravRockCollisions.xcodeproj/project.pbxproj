@@ -13,6 +13,7 @@
 		382441171600345900DFF414 /* Background Green.png in Resources */ = {isa = PBXBuildFile; fileRef = 382441151600345900DFF414 /* Background Green.png */; };
 		382441181600345900DFF414 /* Background Green@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 382441161600345900DFF414 /* Background Green@2x.png */; };
 		3824411B160035AF00DFF414 /* Demon Bar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3824411A160035AF00DFF414 /* Demon Bar@2x.png */; };
+		A5359A94166C3708001CD5FF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A5359A93166C3708001CD5FF /* Default-568h@2x.png */; };
 		A5390691160021EE0059D53C /* Demon Bar.png in Resources */ = {isa = PBXBuildFile; fileRef = A539068F160021EE0059D53C /* Demon Bar.png */; };
 		A539069816002AB40059D53C /* HD Background Green 960x640.png in Resources */ = {isa = PBXBuildFile; fileRef = A539069716002AB40059D53C /* HD Background Green 960x640.png */; };
 		A57F79FB1600578D00DAAFE3 /* background-music-aac.wav in Resources */ = {isa = PBXBuildFile; fileRef = A57F79FA1600578D00DAAFE3 /* background-music-aac.wav */; };
@@ -158,6 +159,7 @@
 		382441151600345900DFF414 /* Background Green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Background Green.png"; sourceTree = "<group>"; };
 		382441161600345900DFF414 /* Background Green@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Background Green@2x.png"; sourceTree = "<group>"; };
 		3824411A160035AF00DFF414 /* Demon Bar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Demon Bar@2x.png"; sourceTree = "<group>"; };
+		A5359A93166C3708001CD5FF /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../Default-568h@2x.png"; sourceTree = "<group>"; };
 		A539068F160021EE0059D53C /* Demon Bar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Demon Bar.png"; sourceTree = "<group>"; };
 		A539069716002AB40059D53C /* HD Background Green 960x640.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HD Background Green 960x640.png"; sourceTree = "<group>"; };
 		A57F79FA1600578D00DAAFE3 /* background-music-aac.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "background-music-aac.wav"; sourceTree = "<group>"; };
@@ -504,6 +506,7 @@
 		D0BB031315F99A27003441D4 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A5359A93166C3708001CD5FF /* Default-568h@2x.png */,
 				A57F79FA1600578D00DAAFE3 /* background-music-aac.wav */,
 				382441151600345900DFF414 /* Background Green.png */,
 				382441161600345900DFF414 /* Background Green@2x.png */,
@@ -959,6 +962,7 @@
 				382441181600345900DFF414 /* Background Green@2x.png in Resources */,
 				3824411B160035AF00DFF414 /* Demon Bar@2x.png in Resources */,
 				A57F79FB1600578D00DAAFE3 /* background-music-aac.wav in Resources */,
+				A5359A94166C3708001CD5FF /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1123,6 +1127,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1134,6 +1139,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1142,6 +1148,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = GravRockCollisions/Prefix.pch;
@@ -1152,6 +1159,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
