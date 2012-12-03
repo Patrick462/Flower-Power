@@ -1,3 +1,9 @@
 # Mutual Mobile Game Jam Stuff
 
 * I haven't pushed to a shared GIT repo before, so I'm putting in a readme as an experiment.
+* (PW) This is a push to github of the EXtreme Turbo Flower Segregation Simulator from 
+  the September 2012 iDev 360 game jam. The theme was "growth".
+* Not presented at the game jam summary the next day.
+* The final build at the game jam worked (honest), but this build has problems with
+  starting in the correct orientation, and having the flowers correctly bouce off the
+  middle barrier. December 2, 2012.
