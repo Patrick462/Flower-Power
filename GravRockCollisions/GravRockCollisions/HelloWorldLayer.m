@@ -43,7 +43,7 @@
 //    CCLOG(@"HWL/randomPoint windowsize: _%.0fx%.0f", _winsize.width, _winsize.height);
     u_int32_t randomX = arc4random_uniform(_winsize.width);
     u_int32_t randomY = arc4random_uniform(_winsize.height);
-    CCLOG(@"HWL/randomPoint                  x:%4d,   y:%4d", randomX, randomY);
+    CCLOG(@"HWL/randomPoint                 x:%4d,   y:%4d", randomX, randomY);
     
     return CGPointMake(randomX, randomY);
 }
@@ -148,7 +148,8 @@
 
 - (void) update:(ccTime)dt {
     if (firstCallToUpdate) {
-        CCLOG(@"HWL/update first cal");
+        CCLOG(@"HWL/update (first call) array count: %d",
+              [_flowers count]);
         firstCallToUpdate = NO;
     }
     Flower *flower;
@@ -261,7 +262,9 @@
 }
 
 -(BOOL)flowerIsOnLeft:(CCSprite*)flower {
-    CCLOG(@"HWL/flowerIsOnLeft");
+    BOOL iAmOnTheLeft = flower.position.y < ( _winsize.height / 2 );
+    CCLOG(@"HWL/flowerIsOnLeft x:%6.1f, y:%6.1f, scale:%5.2f, On Left? %d",
+          flower.position.x, flower.position.y, flower.scale, iAmOnTheLeft);
     return flower.position.y < ( _winsize.height / 2 );
 }
 
@@ -350,7 +353,9 @@
     NSString *flowerPath = [[NSBundle mainBundle]pathForResource:@"blue-flower" ofType:@"png" ];
     Flower *flower = [Flower spriteWithFile:flowerPath];
     flower.position = pos;
-    CGPoint initialVelocity = CGPointMake(arc4random_uniform(200) - 100, arc4random_uniform(200) - 100);
+    int xVel = arc4random_uniform(200);
+    int yVel = arc4random_uniform(200);
+    CGPoint initialVelocity = CGPointMake(xVel - 100, yVel - 100);
     flower.vel = initialVelocity;
     flower.acc = ccp(0,0);
     flower.mass = 1.0f;
@@ -359,8 +364,8 @@
     flower.rot = random() / 0x30000000 - 0.5;
     flower.scale = scale;
     flower.tag = BLUE_FLOWER_TAG;
-    CCLOG(@"HWL/makeBlueFlower   count:%4d, x:%6.1f, y:%6.1f",
-          blueFlowerCount, flower.position.x, flower.position.y);
+    CCLOG(@"HWL/makeBlueFlower   count:%3d, x:%6.1f, y:%6.1f, xVel:%6.1f, yVel:%6.1f",
+          blueFlowerCount, flower.position.x, flower.position.y, flower.vel.x, flower.vel.y);
     return flower;
 }
 
@@ -370,7 +375,9 @@
     NSString *flowerPath = [[NSBundle mainBundle]pathForResource:@"orange-flower" ofType:@"png" ];
     Flower *flower = [Flower spriteWithFile:flowerPath];
     flower.position = pos;
-    CGPoint initialVelocity = CGPointMake(arc4random_uniform(150) - 75, arc4random_uniform(150) - 75);
+    int xVel = arc4random_uniform(150);
+    int yVel = arc4random_uniform(150);
+    CGPoint initialVelocity = CGPointMake(xVel - 75, yVel - 75);
     flower.vel = initialVelocity;
     flower.acc = ccp(0,0);
     flower.mass = 2.0f;
@@ -378,8 +385,8 @@
     flower.rot = random() / 0x30000000 - 0.5;
     flower.scale = scale;
     flower.tag = ORANGE_FLOWER_TAG;
-    CCLOG(@"HWL/makeOrangeFlower count:%4d, x:%6.1f, y:%6.1f",
-          orangeFlowerCount, flower.position.x, flower.position.y);
+    CCLOG(@"HWL/makeOrangeFlower count:%3d, x:%6.1f, y:%6.1f, xVel:%6.1f, yVel:%6.1f",
+          orangeFlowerCount, flower.position.x, flower.position.y, flower.vel.x, flower.vel.y);
 
     return flower;
 }
