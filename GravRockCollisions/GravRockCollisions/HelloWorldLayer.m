@@ -286,10 +286,11 @@
     return NO;
 }
 
-# pragma mark - Timer 
+# pragma mark - Timer and Score
 #define kLevel 1
-#define kFactor 10
-#define kLevelTime 20
+#define kFactor 50
+#define kLevelTime 40
+#define kMinimumScore 100
 
 - (void) startTimer
 {
@@ -304,7 +305,7 @@
 
     NSDate *stopTime = [NSDate dateWithTimeIntervalSinceNow:0];
     NSTimeInterval elapsedTime = [stopTime timeIntervalSinceDate:self.startTime];
-    self.score = round(kLevel * kFactor * (kLevelTime - elapsedTime));
+    self.score = kMinimumScore + round(kLevel * kFactor * max(0,(kLevelTime - elapsedTime)));
 }
 
 
@@ -316,7 +317,7 @@
     if ( [self areFlowersSegregated] ) {
         [self endLevel];        
     } else {
-        NSLog(@"You still have mixed flowers. Fix it!");
+        NSLog(@"You still have mixed flowers. Segregate all Blue flowers to one side, Orange to the other.");
     }
 }
 
