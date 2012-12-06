@@ -265,7 +265,7 @@
     BOOL iAmOnTheLeft = flower.position.y < ( _winsize.height / 2 );
     CCLOG(@"HWL/flowerIsOnLeft x:%6.1f, y:%6.1f, scale:%5.2f, On Left? %d",
           flower.position.x, flower.position.y, flower.scale, iAmOnTheLeft);
-    return flower.position.y < ( _winsize.height / 2 );
+    return iAmOnTheLeft;
 }
 
 -(BOOL) areFlowersSegregated {
@@ -353,9 +353,13 @@
     NSString *flowerPath = [[NSBundle mainBundle]pathForResource:@"blue-flower" ofType:@"png" ];
     Flower *flower = [Flower spriteWithFile:flowerPath];
     flower.position = pos;
-    int xVel = arc4random_uniform(200);
-    int yVel = arc4random_uniform(200);
-    CGPoint initialVelocity = CGPointMake(xVel - 100, yVel - 100);
+    int xVel = -100 + arc4random_uniform(200);
+    int yVel = -100 + arc4random_uniform(200);
+    if ((xVel < 10) && (xVel >=0)) {xVel = 10;}
+    if ((xVel > -10) && (xVel <=0)) {xVel = -10;}
+    if ((yVel < 10) && (yVel >=0)) {yVel = 10;}
+    if ((yVel > -10) && (yVel <=0)) {yVel = -10;}
+    CGPoint initialVelocity = CGPointMake(xVel, yVel);
     flower.vel = initialVelocity;
     flower.acc = ccp(0,0);
     flower.mass = 1.0f;
@@ -375,9 +379,13 @@
     NSString *flowerPath = [[NSBundle mainBundle]pathForResource:@"orange-flower" ofType:@"png" ];
     Flower *flower = [Flower spriteWithFile:flowerPath];
     flower.position = pos;
-    int xVel = arc4random_uniform(150);
-    int yVel = arc4random_uniform(150);
-    CGPoint initialVelocity = CGPointMake(xVel - 75, yVel - 75);
+    int xVel = -75 + arc4random_uniform(150);
+    int yVel = -75 + arc4random_uniform(150);
+    if ((xVel < 10) && (xVel >=0)) {xVel = 10;}
+    if ((xVel > -10) && (xVel <=0)) {xVel = -10;}
+    if ((yVel < 10) && (yVel >=0)) {yVel = 10;}
+    if ((yVel > -10) && (yVel <=0)) {yVel = -10;}
+    CGPoint initialVelocity = CGPointMake(xVel, yVel);
     flower.vel = initialVelocity;
     flower.acc = ccp(0,0);
     flower.mass = 2.0f;
