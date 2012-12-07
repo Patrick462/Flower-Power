@@ -39,11 +39,9 @@
 }
 
 -(CGPoint)randomPoint {
-//    _winsize = [[CCDirector sharedDirector] winSize];
-//    CCLOG(@"HWL/randomPoint windowsize: _%.0fx%.0f", _winsize.width, _winsize.height);
     u_int32_t randomX = arc4random_uniform(_winsize.width);
     u_int32_t randomY = arc4random_uniform(_winsize.height);
-    CCLOG(@"HWL/randomPoint                 x:%4d,   y:%4d", randomX, randomY);
+    CCLOG(@"HWL/randomPoint             x:%4d,   y:%4d", randomX, randomY);
     
     return CGPointMake(randomX, randomY);
 }
@@ -52,11 +50,11 @@
     CCLOG(@"HWL/addFlowers");
     for (NSUInteger i = 0; i < count; i++) {
         
-        Flower *blueFlower = [self makeBlueFlower:[self randomPoint]];
+        Flower *blueFlower = [self makeFlowerAtPoint:[self randomPoint] ofColor:@"blue"];
         [self addChild:blueFlower];
         [_flowers addObject:blueFlower];
         
-        Flower *orangeFlower = [self makeOrangeFlower:[self randomPoint]];
+        Flower *orangeFlower = [self makeFlowerAtPoint:[self randomPoint] ofColor:@"orange"];
         [self addChild:orangeFlower];
         [_flowers addObject:orangeFlower];
     }
@@ -74,7 +72,6 @@
         [[SimpleAudioEngine sharedEngine] playBackgroundMusic:@"background-music-aac.wav"];
         
         self.isTouchEnabled = YES;
-//        self.isAccelerometerEnabled = YES;
         
         // compute window size
 		_winsize = [[CCDirector sharedDirector] winSize];
@@ -156,6 +153,8 @@
     int i = 0;
     CCARRAY_FOREACH(_flowers, flower) {
         CGFloat growthFactor = 1.001;
+        
+        // don't let the flowers get too big - grow them only if they're less than 1/6 of the screen.
         if ( flower.radius < _winsize.width / 6 ) {
             flower.radius = flower.radius * growthFactor;
             flower.scale = flower.scale * growthFactor;
@@ -288,8 +287,8 @@
 
 # pragma mark - Timer and Score
 #define kLevel 1
-#define kFactor 50
-#define kLevelTime 40
+#define kFactor 50          // kFactor * kLevelTime is maximum score (if solve at start of level)
+#define kLevelTime 40       // seconds from start of level to drop to minimum score
 #define kMinimumScore 100
 
 - (void) startTimer
@@ -302,7 +301,6 @@
 - (void) stopTimer
 {
     CCLOG(@"HWL/stopTimer");
-
     NSDate *stopTime = [NSDate dateWithTimeIntervalSinceNow:0];
     NSTimeInterval elapsedTime = [stopTime timeIntervalSinceDate:self.startTime];
     self.score = kMinimumScore + round(kLevel * kFactor * max(0,(kLevelTime - elapsedTime)));
@@ -348,14 +346,33 @@
     [self hideDemonBar];
 }
 
--(Flower *) makeBlueFlower:(CGPoint)pos {
-    blueFlowerCount++;
+-(Flower *) makeFlowerAtPoint:(CGPoint)pos ofColor:(NSString *) flowerColor {
+    NSString *flowerPath;
+    int xVel, yVel, flowerTag;
+    float flowerMass;
+    
+    if ([flowerColor isEqualToString:@"blue"]) {
+        // set up blue flower
+        blueFlowerCount++;
+        flowerPath = [[NSBundle mainBundle]pathForResource:@"blue-flower" ofType:@"png" ];
+        xVel = -100 + arc4random_uniform(200);
+        yVel = -100 + arc4random_uniform(200);
+        flowerTag = BLUE_FLOWER_TAG;
+        flowerMass = 1.0f;
+    }
+    else {
+        // set up orange flower
+        orangeFlowerCount++;
+        flowerPath = [[NSBundle mainBundle]pathForResource:@"orange-flower" ofType:@"png" ];
+        xVel = -75 + arc4random_uniform(150);
+        yVel = -75 + arc4random_uniform(150);
+        flowerTag = ORANGE_FLOWER_TAG;
+        flowerMass = 2.0f;
+    }
+   
     float scale = 0.1f;
-    NSString *flowerPath = [[NSBundle mainBundle]pathForResource:@"blue-flower" ofType:@"png" ];
     Flower *flower = [Flower spriteWithFile:flowerPath];
     flower.position = pos;
-    int xVel = -100 + arc4random_uniform(200);
-    int yVel = -100 + arc4random_uniform(200);
     if ((xVel < 10) && (xVel >=0)) {xVel = 10;}
     if ((xVel > -10) && (xVel <=0)) {xVel = -10;}
     if ((yVel < 10) && (yVel >=0)) {yVel = 10;}
@@ -363,40 +380,14 @@
     CGPoint initialVelocity = CGPointMake(xVel, yVel);
     flower.vel = initialVelocity;
     flower.acc = ccp(0,0);
-    flower.mass = 1.0f;
+    flower.mass = flowerMass;
     flower.radius = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 1 : 0.5)
                     * flower.boundingBox.size.width * scale;
     flower.rot = random() / 0x30000000 - 0.5;
     flower.scale = scale;
-    flower.tag = BLUE_FLOWER_TAG;
-    CCLOG(@"HWL/makeBlueFlower   count:%3d, x:%6.1f, y:%6.1f, xVel:%6.1f, yVel:%6.1f",
-          blueFlowerCount, flower.position.x, flower.position.y, flower.vel.x, flower.vel.y);
-    return flower;
-}
-
--(Flower *) makeOrangeFlower:(CGPoint)pos {
-    orangeFlowerCount++;
-    float scale = 0.1f;
-    NSString *flowerPath = [[NSBundle mainBundle]pathForResource:@"orange-flower" ofType:@"png" ];
-    Flower *flower = [Flower spriteWithFile:flowerPath];
-    flower.position = pos;
-    int xVel = -75 + arc4random_uniform(150);
-    int yVel = -75 + arc4random_uniform(150);
-    if ((xVel < 10) && (xVel >=0)) {xVel = 10;}
-    if ((xVel > -10) && (xVel <=0)) {xVel = -10;}
-    if ((yVel < 10) && (yVel >=0)) {yVel = 10;}
-    if ((yVel > -10) && (yVel <=0)) {yVel = -10;}
-    CGPoint initialVelocity = CGPointMake(xVel, yVel);
-    flower.vel = initialVelocity;
-    flower.acc = ccp(0,0);
-    flower.mass = 2.0f;
-    flower.radius = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 1 : 0.5) * flower.boundingBox.size.width * scale;
-    flower.rot = random() / 0x30000000 - 0.5;
-    flower.scale = scale;
-    flower.tag = ORANGE_FLOWER_TAG;
-    CCLOG(@"HWL/makeOrangeFlower count:%3d, x:%6.1f, y:%6.1f, xVel:%6.1f, yVel:%6.1f",
-          orangeFlowerCount, flower.position.x, flower.position.y, flower.vel.x, flower.vel.y);
-
+    flower.tag = flowerTag;
+    CCLOG(@"HWL/makeFlower   count:%3d, x:%6.1f, y:%6.1f, xVel:%6.1f, yVel:%6.1f, color:%@",
+          blueFlowerCount, flower.position.x, flower.position.y, flower.vel.x, flower.vel.y, flowerColor);
     return flower;
 }
 
