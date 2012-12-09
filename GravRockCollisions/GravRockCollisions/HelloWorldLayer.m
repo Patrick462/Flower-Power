@@ -21,10 +21,12 @@
 @property (assign) BOOL isFingerDown;
 @property (retain) CCSprite *demonBar;
 @property (retain) NSDate *startTime;
-@property (assign) NSInteger score;
+@property (assign) NSInteger levelScore;
+@property (assign) NSInteger totalScore;
+@property (retain) CCLabelTTF *levelScoreLabel;
+@property (retain) CCLabelTTF *totalScoreLabel;
 @property (assign) BOOL levelComplete;
 @property (assign) BOOL quitLevel;
-@property (retain) CCLabelTTF *scoreLabel;
 @end
 
 #pragma mark - HelloWorldLayer
@@ -67,7 +69,8 @@
 	if( (self=[super init]) ) {
         blueFlowerCount = 0;
         orangeFlowerCount = 0;
-        self.score = 0;
+        self.levelScore = 0;
+        self.totalScore = 0;
         self.levelComplete = NO;
         self.quitLevel = NO;
         
@@ -113,7 +116,8 @@
 - (void) startLevel
 {
     CCLOG(@"HWL/startLevel");
-    [self removeChild:self.scoreLabel cleanup:YES];
+    [self removeChild:self.levelScoreLabel cleanup:YES];
+    [self removeChild:self.totalScoreLabel cleanup:YES];
     [self addFlowers:1];
     [self startTimer];
     if (self.levelComplete) {
@@ -130,18 +134,27 @@
     self.levelComplete = YES;
     [self stopTimer];
     [self pauseSchedulerAndActions];
-    [self showScore];
-    NSLog(@"Flowers are segregated by color. You win! Your Score is: %d", self.score);
+    [self showlevelScore];
+    NSLog(@"Flowers are segregated by color. You win! Your levelScore is: %d", self.levelScore);
 }
 
-- (void) showScore
+- (void) showlevelScore
 {
-    CCLOG(@"HWL/showScore");
-    NSString *string = [NSString stringWithFormat:@"Level Complete! Score %d", self.score];
-    CCLabelTTF *label = [CCLabelTTF labelWithString:string fontName:@"Marker Felt" fontSize:40];
+    CCLOG(@"HWL/showlevelScore");
+    NSString *scoreString = [NSString stringWithFormat:@"Success! Level Score %d", self.levelScore];
+    CCLabelTTF *label = [CCLabelTTF labelWithString:scoreString
+                                           fontName:@"Marker Felt" fontSize:36];
+    label.position = ccp( _winsize.width/4, _winsize.height/2);
+    label.rotation = -90;
+    self.levelScoreLabel = label;
+    [self addChild:label];
+
+    scoreString = [NSString stringWithFormat:@"Total Score %d", self.totalScore];
+    label = [CCLabelTTF labelWithString:scoreString
+                                           fontName:@"Marker Felt" fontSize:36];
     label.position = ccp( _winsize.width/2, _winsize.height/2);
     label.rotation = -90;
-    self.scoreLabel = label;
+    self.totalScoreLabel = label;
     [self addChild:label];
 }
 
@@ -157,7 +170,7 @@
         CGFloat growthFactor = 1.001;
         
         // don't let the flowers get too big - grow them only if they're less than 1/6 of the screen.
-        if ( flower.radius < _winsize.width / 9 ) {
+        if ( flower.radius < _winsize.width / 8 ) {
             flower.radius = flower.radius * growthFactor;
             flower.scale = flower.scale * growthFactor;
         }
@@ -289,9 +302,9 @@
 
 # pragma mark - Timer and Score
 #define kLevel 1
-#define kFactor 50          // kFactor * kLevelTime is maximum score (if solve at start of level)
-#define kLevelTime 40       // seconds from start of level to drop to minimum score
-#define kMinimumScore 100
+#define kFactor 50          // kFactor * kLevelTime is maximum levelScore (if solve at start of level)
+#define kLevelTime 40       // seconds from start of level to drop to minimum levelScore
+#define kMinimumlevelScore 100
 
 - (void) startTimer
 {
@@ -306,11 +319,11 @@
     NSDate *stopTime = [NSDate dateWithTimeIntervalSinceNow:0];
     NSTimeInterval elapsedTime = [stopTime timeIntervalSinceDate:self.startTime];
     if (self.quitLevel == NO) {
-         self.score = kMinimumScore + round(kLevel * kFactor * max(0,(kLevelTime - elapsedTime)));
+         self.levelScore = kMinimumlevelScore + round(kLevel * kFactor * max(0,(kLevelTime - elapsedTime)));
     } else {
         self.quitLevel = NO;
-        self.score = 0;}
-   
+        self.levelScore = 0;}
+    self.totalScore = self.totalScore + self.levelScore;
 }
 
 
