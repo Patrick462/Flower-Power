@@ -169,13 +169,12 @@
     CCARRAY_FOREACH(_flowers, flower) {
         CGFloat growthFactor = 1.001;
         
-        // don't let the flowers get too big - grow them only if they're less than 1/6 of the screen.
+        // don't let the flowers get too big - grow them only if they're less than 1/8 of the screen.
         if ( flower.radius < _winsize.width / 8 ) {
             flower.radius = flower.radius * growthFactor;
             flower.scale = flower.scale * growthFactor;
         }
         
-
         // velocity verlet
         flower.position = ccpAdd(ccpAdd(flower.position, ccpMult(flower.vel, dt)), ccpMult(flower.acc, dt*dt));
         flower.vel = ccpAdd(flower.vel, ccpMult(flower.acc, dt));
@@ -218,7 +217,6 @@
                 flower.vel = ccp(flower.vel.x, -flower.vel.y * BOUNCE_RESTITUTION);
             }
             
- 
         }
         
         // collide with other flowers
@@ -266,11 +264,7 @@
                 flower.vel = ccpAdd(vBackN, vBackT);
                 flower2.vel = ccpAdd(v2BackN, v2BackT);
             }
-            
-            //CCLOG(@"after pos: (%.3f,%.3f) (%.3f,%.3f)",rock.position.x,rock.position.y,rock2.position.x,rock2.position.y);                       
-            //CCLOG(@"after vel: (%.3f,%.3f) (%.3f,%.3f)",rock.vel.x,rock.vel.y,rock2.vel.x,rock2.vel.y);
-        }
-        
+        }        
         i++;
     }
 }
@@ -309,7 +303,6 @@
 - (void) startTimer
 {
     CCLOG(@"HWL/startTimer");
-
     self.startTime = [NSDate dateWithTimeIntervalSinceNow:0];
 }
 

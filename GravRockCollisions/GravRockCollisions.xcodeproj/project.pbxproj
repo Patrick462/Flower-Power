@@ -506,7 +506,6 @@
 		D0BB031315F99A27003441D4 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				A5359A93166C3708001CD5FF /* Default-568h@2x.png */,
 				A57F79FA1600578D00DAAFE3 /* background-music-aac.wav */,
 				382441151600345900DFF414 /* Background Green.png */,
 				382441161600345900DFF414 /* Background Green@2x.png */,
@@ -522,8 +521,9 @@
 				D0BB04A015F99C8A003441D4 /* tex.png */,
 				D0BB049815F99C8A003441D4 /* Default-Portrait.png */,
 				D0BB049915F99C8A003441D4 /* Default-Portrait@2x.png */,
-				D0BB049A15F99C8A003441D4 /* Default@2x.png */,
 				D0BB031415F99A27003441D4 /* Default.png */,
+				D0BB049A15F99C8A003441D4 /* Default@2x.png */,
+				A5359A93166C3708001CD5FF /* Default-568h@2x.png */,
 				D0BB031815F99A27003441D4 /* fps_images.png */,
 				D0BB031A15F99A27003441D4 /* fps_images-hd.png */,
 				D0BB031C15F99A27003441D4 /* fps_images-ipadhd.png */,
