@@ -25,8 +25,11 @@
 @property (assign) NSInteger totalScore;
 @property (retain) CCLabelTTF *levelScoreLabel;
 @property (retain) CCLabelTTF *totalScoreLabel;
+@property (retain) CCLabelTTF *gameHighScoreLabel;
 @property (assign) BOOL levelComplete;
 @property (assign) BOOL quitLevel;
+@property (assign) int highScore;	// highest total score
+@property (assign) int numberOfPresses;	// counts the number of times the button has been pressed this session
 @end
 
 #pragma mark - HelloWorldLayer
@@ -107,7 +110,32 @@
         
         // init flowers array
         _flowers = [[CCArray alloc] initWithCapacity:MAX_FLOWERS];
+                
+        // Get the saved high score if the high score file is there, otherwise create a file with high score of -1.
+        // Initial high score is -1 in case their first game's score is 0, they still achieve a new high score.
+        // All have won, and all must have prizes.
+
+        // the home directory which has the subdirectories that we're interested in.
+        NSString *homeDirectoryTop = NSHomeDirectory();
+        // the high score file in the documents directory underneath the home directory.
+        NSString *highScoreFilePath = [homeDirectoryTop stringByAppendingString:@"/Documents/HighScoreFile.txt"];
+        BOOL highScoreFileExists = [[NSFileManager defaultManager]
+                                    fileExistsAtPath:highScoreFilePath];
         
+        if (!highScoreFileExists)
+        {
+            [[NSFileManager defaultManager] createFileAtPath:highScoreFilePath
+                                                    contents:[NSString stringWithFormat:@"%d", -1]
+                                                  attributes: nil];
+        }
+        
+        NSString * highScoreAsString =
+        [NSString stringWithContentsOfFile: highScoreFilePath
+                              usedEncoding: NULL
+                                     error: NULL];
+        _highScore = [highScoreAsString intValue];
+        
+        // note there's no pause here, we may want to add a click-to-start here
         [self startLevel];
  	}
 	return self;
@@ -118,6 +146,7 @@
     CCLOG(@"HWL/startLevel");
     [self removeChild:self.levelScoreLabel cleanup:YES];
     [self removeChild:self.totalScoreLabel cleanup:YES];
+    [self removeChild:self.gameHighScoreLabel cleanup:YES];
     [self addFlowers:1];
     [self startTimer];
     if (self.levelComplete) {
@@ -135,7 +164,6 @@
     [self stopTimer];
     [self pauseSchedulerAndActions];
     [self showlevelScore];
-    NSLog(@"Flowers are segregated by color. You win! Your levelScore is: %d", self.levelScore);
 }
 
 - (void) showlevelScore
@@ -148,13 +176,21 @@
     label.rotation = -90;
     self.levelScoreLabel = label;
     [self addChild:label];
-
-    scoreString = [NSString stringWithFormat:@"Total Score %d", self.totalScore];
+    
+    scoreString = [NSString stringWithFormat:@"Game Score %d", self.totalScore];
     label = [CCLabelTTF labelWithString:scoreString
-                                           fontName:@"Marker Felt" fontSize:36];
+                               fontName:@"Marker Felt" fontSize:48];
     label.position = ccp( _winsize.width/2, _winsize.height/2);
     label.rotation = -90;
     self.totalScoreLabel = label;
+    [self addChild:label];
+
+    scoreString = [NSString stringWithFormat:@"High Game Score %d", _highScore];
+    label = [CCLabelTTF labelWithString:scoreString
+                                           fontName:@"Marker Felt" fontSize:36];
+    label.position = ccp( 3 * _winsize.width/4, _winsize.height/2);
+    label.rotation = -90;
+    self.gameHighScoreLabel = label;
     [self addChild:label];
 }
 
@@ -317,8 +353,17 @@
         self.quitLevel = NO;
         self.levelScore = 0;}
     self.totalScore = self.totalScore + self.levelScore;
+    
+    // update the high total score if necessary
+    NSString *homeDirectoryTop = NSHomeDirectory();
+    NSString *highScoreFilePath = [homeDirectoryTop stringByAppendingString:@"/Documents/HighScoreFile.txt"];
+    if (self.totalScore > _highScore) {
+        _highScore = self.totalScore;
+        [[NSFileManager defaultManager] createFileAtPath:highScoreFilePath
+                                                contents:[NSString stringWithFormat:@"%d", _highScore]
+                                              attributes: nil];
+    }
 }
-
 
 # pragma mark - Demon Bar Management
 -(void) showDemonBar {
