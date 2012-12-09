@@ -1,5 +1,5 @@
 //
-//  Rock.h
+//  Flower.h (was Rock.h)
 //  GravRockCollisions
 //
 //  Created by Justin Shacklette on 9/6/12.

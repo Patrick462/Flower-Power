@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		21DA0E8A16001FE900199182 /* blue-flower.png in Resources */ = {isa = PBXBuildFile; fileRef = 21DA0E8716001FE900199182 /* blue-flower.png */; };
-		21DA0E8B16001FE900199182 /* flower-purple.png in Resources */ = {isa = PBXBuildFile; fileRef = 21DA0E8816001FE900199182 /* flower-purple.png */; };
+		21DA0E8B16001FE900199182 /* purple-flower.png in Resources */ = {isa = PBXBuildFile; fileRef = 21DA0E8816001FE900199182 /* purple-flower.png */; };
 		21DA0E8C16001FE900199182 /* orange-flower.png in Resources */ = {isa = PBXBuildFile; fileRef = 21DA0E8916001FE900199182 /* orange-flower.png */; };
 		382441171600345900DFF414 /* Background Green.png in Resources */ = {isa = PBXBuildFile; fileRef = 382441151600345900DFF414 /* Background Green.png */; };
 		382441181600345900DFF414 /* Background Green@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 382441161600345900DFF414 /* Background Green@2x.png */; };
@@ -154,7 +154,7 @@
 
 /* Begin PBXFileReference section */
 		21DA0E8716001FE900199182 /* blue-flower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blue-flower.png"; sourceTree = "<group>"; };
-		21DA0E8816001FE900199182 /* flower-purple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flower-purple.png"; sourceTree = "<group>"; };
+		21DA0E8816001FE900199182 /* purple-flower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "purple-flower.png"; sourceTree = "<group>"; };
 		21DA0E8916001FE900199182 /* orange-flower.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "orange-flower.png"; sourceTree = "<group>"; };
 		382441151600345900DFF414 /* Background Green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Background Green.png"; sourceTree = "<group>"; };
 		382441161600345900DFF414 /* Background Green@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Background Green@2x.png"; sourceTree = "<group>"; };
@@ -514,7 +514,7 @@
 				A539068F160021EE0059D53C /* Demon Bar.png */,
 				3824411A160035AF00DFF414 /* Demon Bar@2x.png */,
 				21DA0E8716001FE900199182 /* blue-flower.png */,
-				21DA0E8816001FE900199182 /* flower-purple.png */,
+				21DA0E8816001FE900199182 /* purple-flower.png */,
 				21DA0E8916001FE900199182 /* orange-flower.png */,
 				D0BB049D15F99C8A003441D4 /* tex-hd.plist */,
 				D0BB049E15F99C8A003441D4 /* tex-hd.png */,
@@ -954,7 +954,7 @@
 				D0BB04A815F99C8A003441D4 /* tex.plist in Resources */,
 				D0BB04A915F99C8A003441D4 /* tex.png in Resources */,
 				21DA0E8A16001FE900199182 /* blue-flower.png in Resources */,
-				21DA0E8B16001FE900199182 /* flower-purple.png in Resources */,
+				21DA0E8B16001FE900199182 /* purple-flower.png in Resources */,
 				21DA0E8C16001FE900199182 /* orange-flower.png in Resources */,
 				A5390691160021EE0059D53C /* Demon Bar.png in Resources */,
 				A539069816002AB40059D53C /* HD Background Green 960x640.png in Resources */,

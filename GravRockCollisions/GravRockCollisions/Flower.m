@@ -1,5 +1,5 @@
 //
-//  Rock.m
+//  Flower.m (was Rock.m)
 //  GravRockCollisions
 //
 //  Created by Justin Shacklette on 9/6/12.

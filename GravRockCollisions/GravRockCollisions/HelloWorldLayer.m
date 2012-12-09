@@ -13,7 +13,7 @@
 #define PX_TO_M (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 50 : 25)
 #define BOUNCE_RESTITUTION 1.0f
 #define ACCELEROMETER_INTERP_FACTOR 0.1f
-#define MAX_ROCKS 20
+#define MAX_FLOWERS 20
 #define BLUE_FLOWER_TAG 1
 #define ORANGE_FLOWER_TAG 2
 
@@ -23,6 +23,7 @@
 @property (retain) NSDate *startTime;
 @property (assign) NSInteger score;
 @property (assign) BOOL levelComplete;
+@property (assign) BOOL quitLevel;
 @property (retain) CCLabelTTF *scoreLabel;
 @end
 
@@ -68,6 +69,7 @@
         orangeFlowerCount = 0;
         self.score = 0;
         self.levelComplete = NO;
+        self.quitLevel = NO;
         
         [[SimpleAudioEngine sharedEngine] playBackgroundMusic:@"background-music-aac.wav"];
         
@@ -100,8 +102,8 @@
         CCSpriteBatchNode *sheet = [CCSpriteBatchNode batchNodeWithFile:textureFile];
         [self addChild:sheet];
         
-        // init rocks array
-        _flowers = [[CCArray alloc] initWithCapacity:MAX_ROCKS];
+        // init flowers array
+        _flowers = [[CCArray alloc] initWithCapacity:MAX_FLOWERS];
         
         [self startLevel];
  	}
@@ -129,7 +131,7 @@
     [self stopTimer];
     [self pauseSchedulerAndActions];
     [self showScore];
-    NSLog(@"Flowers are segregated. You win! Your Score is: %d", self.score);
+    NSLog(@"Flowers are segregated by color. You win! Your Score is: %d", self.score);
 }
 
 - (void) showScore
@@ -155,7 +157,7 @@
         CGFloat growthFactor = 1.001;
         
         // don't let the flowers get too big - grow them only if they're less than 1/6 of the screen.
-        if ( flower.radius < _winsize.width / 6 ) {
+        if ( flower.radius < _winsize.width / 9 ) {
             flower.radius = flower.radius * growthFactor;
             flower.scale = flower.scale * growthFactor;
         }
@@ -206,26 +208,26 @@
  
         }
         
-        // collide with other rocks
+        // collide with other flowers
         for (int j = i + 1; j < _flowers.count; j++) {
             Flower *flower2 = [_flowers objectAtIndex:j];
             
             CGPoint delta = ccpSub(flower.position, flower2.position);
             
-            // assume rocks are circles to make collision math easy
+            // assume flowers are circles to make collision math easy
             float collisionDistSQ = (flower.radius + flower2.radius) * (flower.radius + flower2.radius);
             float distSQ = ccpDot(delta, delta);
             //CCLOG(@"before pos: (%.3f,%.3f) (%.3f,%.3f)",rock.position.x,rock.position.y,rock2.position.x,rock2.position.y);                       
             //CCLOG(@"before vel: (%.3f,%.3f) (%.3f,%.3f)",rock.vel.x,rock.vel.y,rock2.vel.x,rock2.vel.y);
             if (distSQ <= collisionDistSQ) {  
-                // compute separation vector -- distance need to push rocks appart
+                // compute separation vector -- distance need to push flowers appart
                 float d = ccpLength(delta);
                 CGPoint sep = ccpMult(delta, ((flower.radius + flower2.radius) - d)/d);
                 
                 // compute sum of masses
                 float sum = flower.mass + flower2.mass;
                 
-                // pull both rocks apart weighted by their mass
+                // pull both flowers apart weighted by their mass
                 flower.position = ccpAdd(flower.position, ccpMult(sep, flower2.mass / sum));
                 flower2.position = ccpSub(flower2.position, ccpMult(sep, flower.mass / sum));
                 
@@ -303,7 +305,12 @@
     CCLOG(@"HWL/stopTimer");
     NSDate *stopTime = [NSDate dateWithTimeIntervalSinceNow:0];
     NSTimeInterval elapsedTime = [stopTime timeIntervalSinceDate:self.startTime];
-    self.score = kMinimumScore + round(kLevel * kFactor * max(0,(kLevelTime - elapsedTime)));
+    if (self.quitLevel == NO) {
+         self.score = kMinimumScore + round(kLevel * kFactor * max(0,(kLevelTime - elapsedTime)));
+    } else {
+        self.quitLevel = NO;
+        self.score = 0;}
+   
 }
 
 
@@ -315,7 +322,7 @@
     if ( [self areFlowersSegregated] ) {
         [self endLevel];        
     } else {
-        NSLog(@"You still have mixed flowers. Segregate all Blue flowers to one side, Orange to the other.");
+        NSLog(@"You still have flowers mixed by color. Segregate all Blue flowers to one side, Orange to the other.");
     }
 }
 
@@ -332,11 +339,16 @@
 }
 
 -(BOOL) ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
-    CCLOG(@"HWL/ccTouchBegan");
+    int fingerCount = [[event allTouches] count];
+    CCLOG(@"HWL/ccTouchBegan fingers:%d", fingerCount);
     if ( self.levelComplete) {
         [self startLevel];
     } else {
-        [self showDemonBar];
+        if (fingerCount == 1) {
+            [self showDemonBar];
+        } else {
+            self.quitLevel = YES;
+            [self endLevel];}
     }
     return YES;
 }
@@ -354,7 +366,7 @@
     if ([flowerColor isEqualToString:@"blue"]) {
         // set up blue flower
         blueFlowerCount++;
-        flowerPath = [[NSBundle mainBundle]pathForResource:@"blue-flower" ofType:@"png" ];
+        flowerPath = [[NSBundle mainBundle]pathForResource:@"purple-flower" ofType:@"png" ];
         xVel = -100 + arc4random_uniform(200);
         yVel = -100 + arc4random_uniform(200);
         flowerTag = BLUE_FLOWER_TAG;
