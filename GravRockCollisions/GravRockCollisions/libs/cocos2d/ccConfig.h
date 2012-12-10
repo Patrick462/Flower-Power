@@ -45,7 +45,7 @@
  @since v2.0.0
  */
 #ifndef CC_ENABLE_GL_STATE_CACHE
-#define CC_ENABLE_GL_STATE_CACHE 0
+#define CC_ENABLE_GL_STATE_CACHE 1  // set to 1 Patrick Weigel 12/09/2012 per cocos2d warning.
 #endif
 
 /** @def CC_ENABLE_DEPRECATED

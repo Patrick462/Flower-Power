@@ -6,6 +6,16 @@
 //  Copyright Saturnboy 2012. All rights reserved.
 //  Flower code by Sean McMains, James Stewart, Patrick Weigel
 
+// Text in English :: French
+// Extreme Turbo Flower Segregation Simulator :: 
+//                      v1.0 :: 
+// Super Lucky Flower Sorter :: 
+//             Level Skipped :: 
+//               Level Score :: 
+//                  Success! :: 
+//                Game Score :: 
+//           High Game Score :: 
+
 #import "HelloWorldLayer.h"
 #import "AppDelegate.h"
 #import "Flower.h"
@@ -28,6 +38,7 @@
 @property (retain) CCLabelTTF *gameHighScoreLabel;
 @property (assign) BOOL levelComplete;
 @property (assign) BOOL quitLevel;
+//@property (assign) BOOL startOfGame;
 @property (assign) int highScore;	// highest total score
 @property (assign) int numberOfPresses;	// counts the number of times the button has been pressed this session
 @end
@@ -47,7 +58,7 @@
 -(CGPoint)randomPoint {
     u_int32_t randomX = arc4random_uniform(_winsize.width);
     u_int32_t randomY = arc4random_uniform(_winsize.height);
-    CCLOG(@"HWL/randomPoint             x:%4d,   y:%4d", randomX, randomY);
+    CCLOG(@"HWL/randomPoint       x:%4d,   y:%4d", randomX, randomY);
     
     return CGPointMake(randomX, randomY);
 }
@@ -76,6 +87,7 @@
         self.totalScore = 0;
         self.levelComplete = NO;
         self.quitLevel = NO;
+//        self.startOfGame = YES;
         
         [[SimpleAudioEngine sharedEngine] playBackgroundMusic:@"background-music-aac.wav"];
         
@@ -169,7 +181,14 @@
 - (void) showlevelScore
 {
     CCLOG(@"HWL/showlevelScore");
-    NSString *scoreString = [NSString stringWithFormat:@"Success! Level Score %d", self.levelScore];
+    NSString *scoreString;
+    if (self.levelScore == 0) {
+        scoreString = [NSString stringWithFormat:@"Level Skipped, Level Score %d", self.levelScore];
+
+    } else {
+        scoreString = [NSString stringWithFormat:@"Success! Level Score %d", self.levelScore];
+    }
+    
     CCLabelTTF *label = [CCLabelTTF labelWithString:scoreString
                                            fontName:@"Marker Felt" fontSize:36];
     label.position = ccp( _winsize.width/4, _winsize.height/2);
@@ -195,11 +214,11 @@
 }
 
 - (void) update:(ccTime)dt {
-    if (firstCallToUpdate) {
-        CCLOG(@"HWL/update (first call) array count: %d",
-              [_flowers count]);
-        firstCallToUpdate = NO;
-    }
+//    if (firstCallToUpdate) {
+//        CCLOG(@"HWL/update (first call) array count: %d",
+//              [_flowers count]);
+//        firstCallToUpdate = NO;
+//    }
     Flower *flower;
     int i = 0;
     CCARRAY_FOREACH(_flowers, flower) {
@@ -373,7 +392,8 @@
     if ( [self areFlowersSegregated] ) {
         [self endLevel];        
     } else {
-        NSLog(@"You still have flowers mixed by color. Segregate all Blue flowers to one side, Orange to the other.");
+        NSLog(@"HWL/showDemonBar You still have flowers mixed by color.");
+        NSLog(@"HWL/showDemonBar Segregate Blue flowers to one side, Orange to the other.");
     }
 }
 
@@ -392,7 +412,12 @@
 -(BOOL) ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
     int fingerCount = [[event allTouches] count];
     CCLOG(@"HWL/ccTouchBegan fingers:%d", fingerCount);
-    if ( self.levelComplete) {
+//    if (self.startOfGame) {
+//        self.startOfGame = NO;
+//        [self startLevel];
+//    }
+    
+    if (self.levelComplete) {
         [self startLevel];
     } else {
         if (fingerCount == 1) {
@@ -449,7 +474,7 @@
     flower.rot = random() / 0x30000000 - 0.5;
     flower.scale = scale;
     flower.tag = flowerTag;
-    CCLOG(@"HWL/makeFlower   count:%3d, x:%6.1f, y:%6.1f, xVel:%6.1f, yVel:%6.1f, color:%@",
+    CCLOG(@"HWL/makeFlower #:%3d, x:%6.1f, y:%6.1f, xVel:%5.1f, yVel:%5.1f, %@",
           blueFlowerCount, flower.position.x, flower.position.y, flower.vel.x, flower.vel.y, flowerColor);
     return flower;
 }
