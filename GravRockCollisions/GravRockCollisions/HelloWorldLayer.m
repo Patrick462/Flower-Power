@@ -8,7 +8,7 @@
 
 // Text in English :: French
 // Extreme Turbo Flower Segregation Simulator :: 
-//                      v1.0 :: 
+//                     v 1.0 ::
 // Super Lucky Flower Sorter :: 
 //             Level Skipped :: 
 //               Level Score :: 
@@ -28,19 +28,23 @@
 #define ORANGE_FLOWER_TAG 2
 
 @interface HelloWorldLayer()
-@property (assign) BOOL isFingerDown;
-@property (retain) CCSprite *demonBar;
-@property (retain) NSDate *startTime;
-@property (assign) NSInteger levelScore;
-@property (assign) NSInteger totalScore;
-@property (retain) CCLabelTTF *levelScoreLabel;
-@property (retain) CCLabelTTF *totalScoreLabel;
-@property (retain) CCLabelTTF *gameHighScoreLabel;
-@property (assign) BOOL levelComplete;
-@property (assign) BOOL quitLevel;
-//@property (assign) BOOL startOfGame;
-@property (assign) int highScore;	// highest total score
-@property (assign) int numberOfPresses;	// counts the number of times the button has been pressed this session
+    @property (assign) BOOL isFingerDown;
+    @property (retain) CCSprite *demonBar;
+    @property (retain) NSDate *startTime;
+    @property (assign) NSInteger levelScore;
+    @property (assign) NSInteger totalScore;
+    @property (retain) CCLabelTTF *levelScoreLabel;
+    @property (retain) CCLabelTTF *totalScoreLabel;
+    @property (retain) CCLabelTTF *gameHighScoreLabel;
+    @property (assign) BOOL levelComplete;
+    @property (assign) BOOL quitLevel;
+    @property (assign) BOOL startOfGame;
+    @property (assign) int highScore;	// highest total score
+    @property (assign) int numberOfPresses;	// counts the number of times the button has been pressed this session
+    @property (assign) NSString * levelSkippedLevelScore;
+    @property (assign) NSString * successLevelScore;
+    @property (assign) NSString * gameScore;
+    @property (assign) NSString * highGameScore;
 @end
 
 #pragma mark - HelloWorldLayer
@@ -87,7 +91,7 @@
         self.totalScore = 0;
         self.levelComplete = NO;
         self.quitLevel = NO;
-//        self.startOfGame = YES;
+        self.startOfGame = YES;
         
         [[SimpleAudioEngine sharedEngine] playBackgroundMusic:@"background-music-aac.wav"];
         
@@ -106,7 +110,7 @@
         }
         
         // put up the green background
-        CCSprite *greenBackground = [CCSprite spriteWithFile:@"Background Green.png"];
+        CCSprite *greenBackground = [CCSprite spriteWithFile:@"Default.png"];
         [greenBackground setPosition:ccp((_winsize.width / 2), (_winsize.height / 2))];
         [self addChild:greenBackground z:0];
         
@@ -147,8 +151,17 @@
                                      error: NULL];
         _highScore = [highScoreAsString intValue];
         
-        // note there's no pause here, we may want to add a click-to-start here
-        [self startLevel];
+        // set up the strings to be shown to the user.
+        // in the future add an if statement to implement localization
+        //             Level Skipped ::
+        //               Level Score ::
+        //                  Success! ::
+        //                Game Score ::
+        //           High Game Score ::
+        _levelSkippedLevelScore = @"Level Skipped (Level Score %d)";
+        _successLevelScore      = @"Super Success! Level Score %d";
+        _gameScore              = @"Game Score %d";
+        _highGameScore          = @"High Game Score %d";
  	}
 	return self;
 }
@@ -183,10 +196,10 @@
     CCLOG(@"HWL/showlevelScore");
     NSString *scoreString;
     if (self.levelScore == 0) {
-        scoreString = [NSString stringWithFormat:@"Level Skipped, Level Score %d", self.levelScore];
+        scoreString = [NSString stringWithFormat:_levelSkippedLevelScore, self.levelScore];
 
     } else {
-        scoreString = [NSString stringWithFormat:@"Success! Level Score %d", self.levelScore];
+        scoreString = [NSString stringWithFormat:_successLevelScore, self.levelScore];
     }
     
     CCLabelTTF *label = [CCLabelTTF labelWithString:scoreString
@@ -196,7 +209,7 @@
     self.levelScoreLabel = label;
     [self addChild:label];
     
-    scoreString = [NSString stringWithFormat:@"Game Score %d", self.totalScore];
+    scoreString = [NSString stringWithFormat:_gameScore, self.totalScore];
     label = [CCLabelTTF labelWithString:scoreString
                                fontName:@"Marker Felt" fontSize:48];
     label.position = ccp( _winsize.width/2, _winsize.height/2);
@@ -204,7 +217,7 @@
     self.totalScoreLabel = label;
     [self addChild:label];
 
-    scoreString = [NSString stringWithFormat:@"High Game Score %d", _highScore];
+    scoreString = [NSString stringWithFormat:_highGameScore, _highScore];
     label = [CCLabelTTF labelWithString:scoreString
                                            fontName:@"Marker Felt" fontSize:36];
     label.position = ccp( 3 * _winsize.width/4, _winsize.height/2);
@@ -412,17 +425,27 @@
 -(BOOL) ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
     int fingerCount = [[event allTouches] count];
     CCLOG(@"HWL/ccTouchBegan fingers:%d", fingerCount);
-//    if (self.startOfGame) {
-//        self.startOfGame = NO;
-//        [self startLevel];
-//    }
+    if (self.startOfGame) {
+        CCLOG(@"HWL/ccTouchBegan start of game");
+        CCSprite *greenBackground = [CCSprite spriteWithFile:@"Background Green.png"];
+        [greenBackground setPosition:ccp((_winsize.width / 2), (_winsize.height / 2))];
+        [self addChild:greenBackground z:0];
+        [self startLevel];
+    }
+    CCLOG(@"HWL/ccTouchBegan done with start of game");
     
     if (self.levelComplete) {
+        CCLOG(@"HWL/ccTouchBegan / level complete");
         [self startLevel];
     } else {
         if (fingerCount == 1) {
-            [self showDemonBar];
+            CCLOG(@"HWL/ccTouchBegan / level not complete / finger 1");
+            if (self.startOfGame) {
+                CCLOG(@"HWL/ccTouchBegan start of game, will set to NO");
+                self.startOfGame = NO;
+            } else {[self showDemonBar];}
         } else {
+            CCLOG(@"HWL/ccTouchBegan / level not complete / finger not 1");
             self.quitLevel = YES;
             [self endLevel];}
     }
