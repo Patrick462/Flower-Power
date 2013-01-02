@@ -17,6 +17,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    CCLOG(@"AppDelegate/didFinishLaunchingWithOptions");
 	// Create the main window
 	window_ = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
@@ -92,6 +93,7 @@
 // Supported orientations: Landscape. Customize it for your own needs
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
+    CCLOG(@"AppDelegate/shouldAutorotateToInterfaceOrientation");
 	return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
@@ -99,6 +101,7 @@
 // getting a call, pause the game
 -(void) applicationWillResignActive:(UIApplication *)application
 {
+    CCLOG(@"AppDelegate/applicationWillResignActive");
 	if( [navController_ visibleViewController] == director_ )
 		[director_ pause];
 }
@@ -106,18 +109,21 @@
 // call got rejected
 -(void) applicationDidBecomeActive:(UIApplication *)application
 {
+    CCLOG(@"AppDelegate/applicationDidBecomeActive");
 	if( [navController_ visibleViewController] == director_ )
 		[director_ resume];
 }
 
 -(void) applicationDidEnterBackground:(UIApplication*)application
 {
+    CCLOG(@"AppDelegate/applicationDidEnterBackground");
 	if( [navController_ visibleViewController] == director_ )
 		[director_ stopAnimation];
 }
 
 -(void) applicationWillEnterForeground:(UIApplication*)application
 {
+    CCLOG(@"AppDelegate/applicationWillEnterForeground");
 	if( [navController_ visibleViewController] == director_ )
 		[director_ startAnimation];
 }
@@ -125,23 +131,27 @@
 // application will be killed
 - (void)applicationWillTerminate:(UIApplication *)application
 {
+    CCLOG(@"AppDelegate/applicationWillTerminate");
 	CC_DIRECTOR_END();
 }
 
 // purge memory
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
 {
+    CCLOG(@"AppDelegate/applicationDidReceiveMemoryWarning");
 	[[CCDirector sharedDirector] purgeCachedData];
 }
 
 // next delta time will be zero
 -(void) applicationSignificantTimeChange:(UIApplication *)application
 {
+    CCLOG(@"AppDelegateapplicationSignificantTimeChange/");
 	[[CCDirector sharedDirector] setNextDeltaTimeZero:YES];
 }
 
 - (void) dealloc
 {
+    CCLOG(@"AppDelegate/dealloc");
 	[window_ release];
 	[navController_ release];
 

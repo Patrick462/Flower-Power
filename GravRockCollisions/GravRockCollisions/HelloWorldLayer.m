@@ -6,16 +6,6 @@
 //  Copyright Saturnboy 2012. All rights reserved.
 //  Flower code by Sean McMains, James Stewart, Patrick Weigel
 
-// Text in English :: French
-// Extreme Turbo Flower Segregation Simulator :: 
-//                     v 1.0 ::
-// Super Lucky Flower Sorter :: 
-//             Level Skipped :: 
-//               Level Score :: 
-//                  Success! :: 
-//                Game Score :: 
-//           High Game Score :: 
-
 #import "HelloWorldLayer.h"
 #import "AppDelegate.h"
 #import "Flower.h"
@@ -36,11 +26,12 @@
     @property (retain) CCLabelTTF *levelScoreLabel;
     @property (retain) CCLabelTTF *totalScoreLabel;
     @property (retain) CCLabelTTF *gameHighScoreLabel;
+    @property (retain) CCLabelTTF *tapToBegin;
     @property (assign) BOOL levelComplete;
     @property (assign) BOOL quitLevel;
     @property (assign) BOOL startOfGame;
     @property (assign) int highScore;	// highest total score
-    @property (assign) int numberOfPresses;	// counts the number of times the button has been pressed this session
+//    @property (assign) int numberOfPresses;	// counts the number of times the button has been pressed this session
     @property (assign) NSString * levelSkippedLevelScore;
     @property (assign) NSString * successLevelScore;
     @property (assign) NSString * gameScore;
@@ -62,7 +53,7 @@
 -(CGPoint)randomPoint {
     u_int32_t randomX = arc4random_uniform(_winsize.width);
     u_int32_t randomY = arc4random_uniform(_winsize.height);
-    CCLOG(@"HWL/randomPoint       x:%4d,   y:%4d", randomX, randomY);
+//    CCLOG(@"HWL/randomPoint       x:%4d,   y:%4d", randomX, randomY);
     
     return CGPointMake(randomX, randomY);
 }
@@ -85,6 +76,27 @@
     CCLOG(@"HWL/init");
     firstCallToUpdate = YES;
 	if( (self=[super init]) ) {
+        // test of random in setting rotation
+//        float sum1 = 0, sum2 = 0;
+//        int countneg15 = 0, countneg05 = 0, count05 = 0, count15 = 0;
+//        for (int i=1; i<=10000; i++) {
+//            float rotation = random() / 0x30000000 - 0.5;
+//            sum1 = sum1 + rotation;
+//            if (rotation == -1.5) {countneg15++;}
+//            if (rotation == -0.5) {countneg05++;}
+//            if (rotation ==  0.5) {count05++;}
+//            if (rotation ==  1.5) {count15++;}
+//            
+//            u_int32_t prerotation2 = arc4random_uniform(4);
+//            float rotation2 = prerotation2 - 1.5;
+//            sum2 = sum2 + rotation2;
+            
+//            NSLog(@"HWL/init rotation      1:%5.2f   2:%5.2f", rotation, rotation2);
+//        }
+//            NSLog(@"HWL/init rotation sum 1:%6.2f  2:%6.2f, cneg15:%d,  cneg05:%d,  c05:%d,  c15:%d",
+//                  sum1, sum2, countneg15, countneg05, count05, count15);
+//
+        
         blueFlowerCount = 0;
         orangeFlowerCount = 0;
         self.levelScore = 0;
@@ -153,16 +165,40 @@
         
         // set up the strings to be shown to the user.
         // in the future add an if statement to implement localization
-        //             Level Skipped ::
-        //               Level Score ::
-        //                  Success! ::
-        //                Game Score ::
-        //           High Game Score ::
-        _levelSkippedLevelScore = @"Level Skipped (Level Score %d)";
-        _successLevelScore      = @"Super Success! Level Score %d";
-        _gameScore              = @"Game Score %d";
-        _highGameScore          = @"High Game Score %d";
+        // Text in English :: French
+        // Text in English :: French
+         // Extreme Turbo Flower Segregation Simulator ::
+       //                     v 1.0 :: v 1.0
+        // Super Lucky Flower Sorter :: La Trieuse Super Porte-Bonheur de la Fleur
+        //             Level Skipped :: Niveau a Sauté
+        //               Level Score :: Score du Niveau
+        //                  Success! :: Super Succès!
+        //                Game Score :: Score du Jeu
+        //           High Game Score :: Score le Plus Élevé du Jeu
+        BOOL isEnglish = YES;
+        BOOL isFrench = NO;
+        if (isEnglish) {
+            _levelSkippedLevelScore = @"Level Skipped. Level Score ";
+            _successLevelScore      = @"Super Success! Level Score ";
+            _gameScore              = @"Game Score ";
+            _highGameScore          = @"High Game Score ";
+            
+        }
+        if (isFrench) {
+            _levelSkippedLevelScore = @"Niveau a Sauté. Score du Niveau ";
+            _successLevelScore      = @"Super Succès! Score du Niveau ";
+            _gameScore              = @"Score du Jeu ";
+            _highGameScore          = @"Score le Plus Élevé du Jeu ";
+
+        }
  	}
+    CCLabelTTF *label = [CCLabelTTF labelWithString:@"Tap to Begin!"
+                                           fontName:@"Marker Felt" fontSize:28];
+    label.position = ccp( 9 * _winsize.width/10, _winsize.height/2);
+    label.rotation = -90;
+    self.tapToBegin = label;
+    [self addChild:label];
+
 	return self;
 }
 
@@ -172,6 +208,7 @@
     [self removeChild:self.levelScoreLabel cleanup:YES];
     [self removeChild:self.totalScoreLabel cleanup:YES];
     [self removeChild:self.gameHighScoreLabel cleanup:YES];
+    [self removeChild:self.tapToBegin cleanup:YES];
     [self addFlowers:1];
     [self startTimer];
     if (self.levelComplete) {
@@ -194,22 +231,31 @@
 - (void) showlevelScore
 {
     CCLOG(@"HWL/showlevelScore");
+    
+    // NOTE: in French, 1,000 should be displayed as 1.000 (?). Does NSFormatter handle this when given localization?
+    // Is there some NSLocalizationFormatter?
     NSString *scoreString;
+    NSNumberFormatter *format = [[NSNumberFormatter alloc] init];
+    [format setNumberStyle:NSNumberFormatterDecimalStyle];
+    NSString * formattedScore = [format stringFromNumber:[NSNumber numberWithInteger:self.levelScore]];
+    NSString * formattedTotalScore = [format stringFromNumber:[NSNumber numberWithInteger:self.totalScore]];
+    NSString * formattedHighScore = [format stringFromNumber:[NSNumber numberWithInteger:_highScore]];
+    
     if (self.levelScore == 0) {
-        scoreString = [NSString stringWithFormat:_levelSkippedLevelScore, self.levelScore];
+        scoreString = [_levelSkippedLevelScore stringByAppendingString:formattedScore];
 
     } else {
-        scoreString = [NSString stringWithFormat:_successLevelScore, self.levelScore];
+        scoreString = [_successLevelScore stringByAppendingString:formattedScore];
     }
     
     CCLabelTTF *label = [CCLabelTTF labelWithString:scoreString
-                                           fontName:@"Marker Felt" fontSize:36];
+                                           fontName:@"Marker Felt" fontSize:32];
     label.position = ccp( _winsize.width/4, _winsize.height/2);
     label.rotation = -90;
     self.levelScoreLabel = label;
     [self addChild:label];
     
-    scoreString = [NSString stringWithFormat:_gameScore, self.totalScore];
+    scoreString = [_gameScore stringByAppendingString:formattedTotalScore];
     label = [CCLabelTTF labelWithString:scoreString
                                fontName:@"Marker Felt" fontSize:48];
     label.position = ccp( _winsize.width/2, _winsize.height/2);
@@ -217,13 +263,14 @@
     self.totalScoreLabel = label;
     [self addChild:label];
 
-    scoreString = [NSString stringWithFormat:_highGameScore, _highScore];
+    scoreString = [_highGameScore stringByAppendingString:formattedHighScore];
     label = [CCLabelTTF labelWithString:scoreString
-                                           fontName:@"Marker Felt" fontSize:36];
+                                           fontName:@"Marker Felt" fontSize:32];
     label.position = ccp( 3 * _winsize.width/4, _winsize.height/2);
     label.rotation = -90;
     self.gameHighScoreLabel = label;
     [self addChild:label];
+    [format release];
 }
 
 - (void) update:(ccTime)dt {
@@ -494,11 +541,12 @@
     flower.mass = flowerMass;
     flower.radius = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ? 1 : 0.5)
                     * flower.boundingBox.size.width * scale;
+    // this next line returns values of -0.5, 0.5, and 1.5
     flower.rot = random() / 0x30000000 - 0.5;
     flower.scale = scale;
     flower.tag = flowerTag;
-    CCLOG(@"HWL/makeFlower #:%3d, x:%6.1f, y:%6.1f, xVel:%5.1f, yVel:%5.1f, %@",
-          blueFlowerCount, flower.position.x, flower.position.y, flower.vel.x, flower.vel.y, flowerColor);
+    CCLOG(@"HWL/makeFlower #:%3d, x:%6.1f, y:%6.1f, xVel:%5.1f, yVel:%5.1f, rot: %5.1f  %@",
+          blueFlowerCount, flower.position.x, flower.position.y, flower.vel.x, flower.vel.y, flower.rot, flowerColor);
     return flower;
 }
 
